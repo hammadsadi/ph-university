@@ -136,6 +136,10 @@ const studentSchema = new Schema<TStudent>({
     type: presentAddressSchema,
     required: true,
   },
+  bloodGroup: {
+    type: String,
+    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+  },
   guardian: {
     type: guardianSchema,
     required: true,

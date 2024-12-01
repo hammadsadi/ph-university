@@ -39,6 +39,7 @@ export type TStudent = {
   emergencyContactNo: string;
   presentAddress: PresentAddress;
   permanentAddress: PresentAddress;
+  bloodGroup: 'A+' | 'A-' | 'B+' | 'B-' | 'AB+' | 'AB-' | 'O+' | 'O-';
   guardian: Guardian;
   localGuardian: LocalGuardian;
   profileImage: string;
