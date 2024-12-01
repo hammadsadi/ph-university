@@ -38,6 +38,19 @@ const academicSemesterSchema = new Schema<TAcademicSemester>(
   },
 );
 
+// Check Data Exist or Not Using Hook
+academicSemesterSchema.pre('save', async function(next){
+  const isExist = await AcademicSemester.findOne({
+    name: this.name,
+    year:this.year
+  })
+
+  // Validation
+  if(isExist){
+    throw new Error('Semester Already Exist!')
+  }
+  next()
+})
 export const AcademicSemester = model<TAcademicSemester>(
   'AcademicSemester',
   academicSemesterSchema,
