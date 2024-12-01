@@ -68,6 +68,7 @@ const createValidationStudentSchema = z.object({
         }),
       }),
       dateOfBirth: z.date(),
+      admissionSemester: z.string(),
       contactNo: z.string(),
       emergencyContactNo: z.string(),
       presentAddress: presentAddressValidationSchema,

@@ -111,6 +111,11 @@ const studentSchema = new Schema<TStudent>({
     enum: ['Male', 'Female'],
     required: true,
   },
+  admissionSemester: {
+    type: Schema.Types.ObjectId,
+    ref: 'AcademicSemester',
+    required: true,
+  },
   dateOfBirth: {
     type: Date,
     required: true,

@@ -10,6 +10,10 @@ const userSaveToDB = async (password: string, userInfo: TStudent) => {
   const userData: Partial<TUser> = {};
   userData.role = 'student';
   userData.password = password || config.default_password;
+
+  // Generated ID
+  const generatedId = (payload) => {};
+
   // Genare User ID
   userData.id = '2030001';
 
