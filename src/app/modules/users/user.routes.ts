@@ -9,7 +9,7 @@ const router = Router();
 // Create Student Route
 router.post(
   '/users/create-student',
-  validateRequest(studentValidationSchemas.studentSchema),
+  validateRequest(studentValidationSchemas.createValidationStudentSchema),
   userControllers.userCreate,
 );
 
