@@ -8,6 +8,15 @@ const createAcademicFacultyValidation = z.object({
   }),
 });
 
+const updateAcademicFacultyValidation = z.object({
+  body: z.object({
+    name: z.string({
+      invalid_type_error: 'Academic Faculty Must be String',
+    }),
+  }),
+});
+
 export const academicFacultyValidationSchemas = {
   createAcademicFacultyValidation,
+  updateAcademicFacultyValidation,
 };
