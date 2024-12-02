@@ -95,6 +95,7 @@ const studentSchema = new Schema<TStudent>({
   id: {
     type: String,
     required: true,
+    unique: true,
   },
   name: {
     type: studentNameSchema,

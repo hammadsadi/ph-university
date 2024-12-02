@@ -17,7 +17,7 @@ const userSaveToDB = async (password: string, payload: TStudent) => {
     payload.admissionSemester,
   );
   // Genare User ID
-  userData.id = generatedId(admissionSemester);
+  userData.id = await generatedId(admissionSemester);
 
   // Create User
   const createdUser = await User.create(userData);
