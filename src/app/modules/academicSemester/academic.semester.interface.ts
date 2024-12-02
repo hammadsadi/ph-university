@@ -14,6 +14,7 @@ export type TMonths =
 
 export type TAcademicSemesterName = 'Authum' | 'Summer' | 'Fall';
 export type TAcademicSemesterCode = '01' | '02' | '03';
+// Model Mian Type
 export type TAcademicSemester = {
   name: TAcademicSemesterName;
   code: TAcademicSemesterCode;

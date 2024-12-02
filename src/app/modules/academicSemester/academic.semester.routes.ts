@@ -16,18 +16,21 @@ route.post(
 );
 // Get All Academic Semester
 route.get(
-  '/fetch-academic-semester',
+  '/all-academic-semester',
   AcademicSemesterControllers.academicSemesterGetAllController,
 );
 // Get Single Academic Semester
 route.get(
-  '/academic-semester/:semesterId',
+  '/:semesterId',
   AcademicSemesterControllers.academicSemesterGetSingleController,
 );
 
 // Update Single Academic Semester
 route.patch(
-  '/academic-semester/:semesterId',
+  '/:semesterId',
+  validateRequest(
+    academicSemesterValidationSchemas.updateAcadimicSemesterValidation,
+  ),
   AcademicSemesterControllers.updateSingleAcademicSemesterControllers,
 );
 

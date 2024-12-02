@@ -67,7 +67,7 @@ const createValidationStudentSchema = z.object({
           message: 'You Can Select Two Types: Male or Female',
         }),
       }),
-      dateOfBirth: z.date(),
+      dateOfBirth: z.string(),
       admissionSemester: z.string(),
       contactNo: z.string(),
       emergencyContactNo: z.string(),

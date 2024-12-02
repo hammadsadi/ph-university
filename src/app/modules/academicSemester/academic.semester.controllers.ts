@@ -48,7 +48,11 @@ const academicSemesterGetSingleController = catchAsync(
  * Update Single Academic Semester Controller
  */
 const updateSingleAcademicSemesterControllers = catchAsync(async (req, res, next) => {
-  const result = await AcademicSemesterServices.updateSingleCcademicSemesterToDB(req.params.semesterId, req.body);
+  const result =
+    await AcademicSemesterServices.updateSingleAcademicSemesterToDB(
+      req.params.semesterId,
+      req.body,
+    );
   sendResponse(res, {
     success: true,
     message: 'Single Academic Semester Updated Successful',
