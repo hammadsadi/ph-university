@@ -3,8 +3,8 @@ import { TUser } from './user.interface';
 import { User } from './user.model';
 import { TStudent } from '../students/student.interface';
 import { Student } from '../students/student.mode';
-import { AcademicSemester } from '../academicSemester/academic.semester.model';
 import { generatedId } from './user.utils';
+import { AdmissionSemester } from '../admissionSemester/admission.semester.model';
 
 // User Save to DB
 const userSaveToDB = async (password: string, payload: TStudent) => {
@@ -13,7 +13,7 @@ const userSaveToDB = async (password: string, payload: TStudent) => {
   userData.role = 'student';
   userData.password = password || config.default_password;
 
-  const admissionSemester = await AcademicSemester.findById(
+  const admissionSemester = await AdmissionSemester.findById(
     payload.admissionSemester,
   );
   // Genare User ID

@@ -1,4 +1,4 @@
-import { TAcademicSemester } from '../academicSemester/academic.semester.interface';
+import { TAdmissionSemester } from '../admissionSemester/admission.semester.interface';
 import { User } from './user.model';
 
 // Get Last User ID
@@ -11,7 +11,7 @@ const findLastUserentId = async () => {
 };
 
 // Generated ID
-export const generatedId = async (payload: TAcademicSemester | null) => {
+export const generatedId = async (payload: TAdmissionSemester | null) => {
   // First Time Default ID
   let currentId = (0).toString();
   const lastStudentId = await findLastUserentId();
