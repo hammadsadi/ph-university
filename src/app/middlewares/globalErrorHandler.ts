@@ -9,7 +9,8 @@ const globalErrorHandler = (
   // eslint-disable-next-line no-unused-vars
   next: NextFunction,
 ) => {
-  res.status(500).json({
+  const statusCode = error.statusCode || 500;
+  res.status(statusCode).json({
     success: false,
     message: error.message || 'Something Went Wrong',
     error,

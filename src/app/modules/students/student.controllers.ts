@@ -14,6 +14,41 @@ const getAllStudents = catchAsync(async (req, res, next) => {
   });
 });
 
+
+/**
+ * Get Single Student
+ */
+const getSingleStudent = catchAsync(async (req, res, next) => {
+  const result = await StudentServices.getSingleStudentFromDB(
+    req.params.studentId,
+  );
+  sendResponse(res, {
+    success: true,
+    message: 'Single Srudent Get Successful',
+    data: result,
+  });
+});
+
+
+/**
+ * Update Single Student
+ */
+const updateSingleStudent= catchAsync(
+  async (req, res, next) => {
+    const result =
+      await StudentServices.updateSingleStudentFromDB(
+        req.params.studentId,
+        req.body,
+      );
+    sendResponse(res, {
+      success: true,
+      message: 'Single Student Updated Successful',
+      data: result,
+    });
+  },
+);
 export const StudentsControllers = {
   getAllStudents,
+  getSingleStudent,
+  updateSingleStudent,
 };

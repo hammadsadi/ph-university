@@ -1,5 +1,6 @@
 import { model, Schema } from 'mongoose';
 import { TAcademicDepartment } from './academicDepartment.interface';
+import AppError from '../../errors/AppError';
 
 const academicDepartmentSchema = new Schema<TAcademicDepartment>(
   {
@@ -18,27 +19,25 @@ const academicDepartmentSchema = new Schema<TAcademicDepartment>(
   },
 );
 
-
 // When Create Academic Department Check Exist or not Before Save Using Pre hooks
-academicDepartmentSchema.pre('save', async function(next){
+academicDepartmentSchema.pre('save', async function (next) {
   // Is Exist or not
-  const isExistDepartment = await AcademicDepartment.findOne({name:this.name})
-  if(isExistDepartment){
-    throw new Error('This Academic Department is Already Exist!')
+  const isExistDepartment = await AcademicDepartment.findOne({
+    name: this.name,
+  });
+  if (isExistDepartment) {
+    throw new AppError(400, 'This Academic Department is Already Exist!');
   }
-  next()
-})
-
-
+  next();
+});
 
 // Check Data is Exist or Not When Update an Academic Department
 academicDepartmentSchema.pre('findOneAndUpdate', async function (next) {
-
-  const query = this.getQuery()
+  const query = this.getQuery();
   // Is Exist or not
   const isExistDepartment = await AcademicDepartment.findOne(query);
   if (!isExistDepartment) {
-    throw new Error('This Academic Department is Not Found!');
+    throw new AppError(404, 'This Academic Department is Not Found!');
   }
   next();
 });
