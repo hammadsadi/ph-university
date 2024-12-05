@@ -21,7 +21,7 @@ const getAllStudentFromDB = async () => {
 // Get Single Student
 const getSingleStudentFromDB = async (id: string) => {
   // Get Single Academic Feaculty
-  const result = await Student.findById(id)
+  const result = await Student.findOne({ id })
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
@@ -32,16 +32,72 @@ const getSingleStudentFromDB = async (id: string) => {
   return result;
 };
 
-// Updated Single Student
-const updateSingleStudentFromDB = async (id: string, payload: TStudent) => {
-  // Fine and Update Semester
-  const result = await Student.findByIdAndUpdate(id, payload, {
+/**
+ * @Description  Updated Single Student
+ * @param id
+ * @returns Data
+ * @Method Patch
+ */
+const updateSingleStudentFromDB = async (
+  id: string,
+  payload: Partial<TStudent>,
+) => {
+  const {
+    name,
+    presentAddress,
+    permanentAddress,
+    guardian,
+    localGuardian,
+    ...remaingPayload
+  } = payload;
+
+  // Empty Object For Store Data
+  const modefiedData: Record<string, unknown> = { ...remaingPayload };
+
+  // Set Data for name none Primitive Data Using For loop
+  if (name && Object.keys(name).length) {
+    for (const [key, value] of Object.entries(name)) {
+      modefiedData[`name.${key}`] = value;
+    }
+  }
+  // Set Data for Present Address none Primitive Data Using For loop
+  if (presentAddress && Object.keys(presentAddress).length) {
+    for (const [key, value] of Object.entries(presentAddress)) {
+      modefiedData[`presentAddress.${key}`] = value;
+    }
+  }
+  // Set Data for Permanent Address none Primitive Data Using For loop
+  if (permanentAddress && Object.keys(permanentAddress).length) {
+    for (const [key, value] of Object.entries(permanentAddress)) {
+      modefiedData[`permanentAddress.${key}`] = value;
+    }
+  }
+  // Set Data for Guardina none Primitive Data Using For loop
+  if (guardian && Object.keys(guardian).length) {
+    for (const [key, value] of Object.entries(guardian)) {
+      modefiedData[`guardian.${key}`] = value;
+    }
+  }
+  // Set Data for Local Guardian none Primitive Data Using For loop
+  if (localGuardian && Object.keys(localGuardian).length) {
+    for (const [key, value] of Object.entries(localGuardian)) {
+      modefiedData[`localGuardian.${key}`] = value;
+    }
+  }
+  // Find and Update Student Data
+  const result = await Student.findOneAndUpdate({ id }, modefiedData, {
     new: true,
+    runValidators: true,
   });
   return result;
 };
 
-// Delete Single Student
+/**
+ * @Description Delete Single Student
+ * @param id
+ * @returns Data
+ * @Method DELETE
+ */
 const deleteSingleStudentFromDB = async (id: string) => {
   // Init Session
   const session = await mongoose.startSession();
@@ -77,6 +133,7 @@ const deleteSingleStudentFromDB = async (id: string) => {
   } catch (error) {
     await session.abortTransaction();
     await session.endSession();
+    throw new AppError(400, 'Failed to Delete Student Data');
   }
 };
 export const StudentServices = {

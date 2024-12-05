@@ -35,11 +35,12 @@ const getSingleStudent = catchAsync(async (req, res, next) => {
  */
 const updateSingleStudent= catchAsync(
   async (req, res, next) => {
-    const result =
-      await StudentServices.updateSingleStudentFromDB(
-        req.params.studentId,
-        req.body,
-      );
+    const { studentId } = req.params;
+    const { student } = req.body;
+    const result = await StudentServices.updateSingleStudentFromDB(
+      studentId,
+      student,
+    );
     sendResponse(res, {
       success: true,
       message: 'Single Student Updated Successful',

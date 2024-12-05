@@ -6,6 +6,7 @@ import {
   StudentName,
   TStudent,
 } from './student.interface';
+import AppError from '../../errors/AppError';
 
 // Student Name Sub Schema
 const studentNameSchema = new Schema<StudentName>({
@@ -169,5 +170,19 @@ const studentSchema = new Schema<TStudent>(
     timestamps: true,
   },
 );
+
+// Check Data is Exist or Not When Student Update
+studentSchema.pre('findOneAndUpdate', async function (next) {
+  const query = this.getQuery();
+
+  // Is Exist or not
+  const isExistStudent = await Student.findOne(query);
+
+  if (!isExistStudent) {
+    console.log(isExistStudent);
+    throw new AppError(404, 'This Student Data is Not Found!');
+  }
+  next();
+});
 
 export const Student = model('Student', studentSchema);
