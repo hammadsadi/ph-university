@@ -91,74 +91,83 @@ const localGuardianSchema = new Schema<LocalGuardian>({
 });
 
 // Student Main Schema
-const studentSchema = new Schema<TStudent>({
-  id: {
-    type: String,
-    required: true,
-    unique: true,
+const studentSchema = new Schema<TStudent>(
+  {
+    id: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    name: {
+      type: studentNameSchema,
+      required: true,
+    },
+    user: {
+      type: Schema.Types.ObjectId,
+      ref: 'User',
+      unique: true,
+      required: true,
+    },
+    gender: {
+      type: String,
+      enum: ['Male', 'Female'],
+      required: true,
+    },
+    admissionSemester: {
+      type: Schema.Types.ObjectId,
+      ref: 'AdmissionSemester',
+      required: true,
+    },
+    academicDepartment: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicDepartment',
+      required: true,
+    },
+    dateOfBirth: {
+      type: Date,
+      required: true,
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true,
+    },
+    contactNo: {
+      type: String,
+      required: true,
+    },
+    emergencyContactNo: {
+      type: String,
+      required: true,
+    },
+    presentAddress: {
+      type: presentAddressSchema,
+      required: true,
+    },
+    permanentAddress: {
+      type: presentAddressSchema,
+      required: true,
+    },
+    bloodGroup: {
+      type: String,
+      enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
+    },
+    guardian: {
+      type: guardianSchema,
+      required: true,
+    },
+    localGuardian: {
+      type: localGuardianSchema,
+      required: true,
+    },
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
-  name: {
-    type: studentNameSchema,
-    required: true,
+  {
+    timestamps: true,
   },
-  user: {
-    type: Schema.Types.ObjectId,
-    ref: 'User',
-    unique: true,
-    required: true,
-  },
-  gender: {
-    type: String,
-    enum: ['Male', 'Female'],
-    required: true,
-  },
-  admissionSemester: {
-    type: Schema.Types.ObjectId,
-    ref: 'AdmissionSemester',
-    required: true,
-  },
-  academicDepartment: {
-    type: Schema.Types.ObjectId,
-    ref: 'AcademicDepartment',
-    required: true,
-  },
-  dateOfBirth: {
-    type: Date,
-    required: true,
-  },
-  email: {
-    type: String,
-    required: true,
-    unique: true,
-  },
-  contactNo: {
-    type: String,
-    required: true,
-  },
-  emergencyContactNo: {
-    type: String,
-    required: true,
-  },
-  presentAddress: {
-    type: presentAddressSchema,
-    required: true,
-  },
-  permanentAddress: {
-    type: presentAddressSchema,
-    required: true,
-  },
-  bloodGroup: {
-    type: String,
-    enum: ['A+', 'A-', 'B+', 'B-', 'AB+', 'AB-', 'O+', 'O-'],
-  },
-  guardian: {
-    type: guardianSchema,
-    required: true,
-  },
-  localGuardian: {
-    type: localGuardianSchema,
-    required: true,
-  },
-});
+);
 
 export const Student = model('Student', studentSchema);
