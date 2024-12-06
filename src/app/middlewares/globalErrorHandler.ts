@@ -4,6 +4,8 @@ import { ErrorRequestHandler } from 'express';
 import { ZodError, ZodIssue } from 'zod';
 import { TErrorResources } from '../interfaces/error';
 import config from '../config';
+import zodErrorHandler from '../errors/zodErrorHandler';
+import handleValidationError from '../errors/handleValidationError';
 
 const globalErrorHandler: ErrorRequestHandler = (
   error,
@@ -23,28 +25,15 @@ const globalErrorHandler: ErrorRequestHandler = (
     },
   ];
 
-  // Zod Error Handler
-  const zodErrorHandler = (error: ZodError) => {
-    const errorResources: TErrorResources = error.issues.map(
-      (issue: ZodIssue) => {
-        return {
-          path: issue?.path[issue.path.length - 1],
-          message: issue.message,
-        };
-      },
-    );
-    const statusCode = 400;
-
-    return {
-      statusCode,
-      message: 'Validation Error',
-      errorResources,
-    };
-  };
-
-  // detect Zod Error
+  // Detect Zod Error
   if (error instanceof ZodError) {
     const errorSimplies = zodErrorHandler(error);
+    statusCode = errorSimplies.statusCode;
+    message = errorSimplies.message;
+    errorResources = errorSimplies.errorResources;
+  } else if (error?.name === 'ValidationError') {
+    // If Zod Validation Error not Workin then it be worked
+    const errorSimplies = handleValidationError(error);
     statusCode = errorSimplies.statusCode;
     message = errorSimplies.message;
     errorResources = errorSimplies.errorResources;
