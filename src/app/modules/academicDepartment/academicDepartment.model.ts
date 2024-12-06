@@ -7,6 +7,7 @@ const academicDepartmentSchema = new Schema<TAcademicDepartment>(
     name: {
       type: String,
       required: true,
+      unique: true,
     },
     academicFaculty: {
       type: Schema.Types.ObjectId,
@@ -19,17 +20,17 @@ const academicDepartmentSchema = new Schema<TAcademicDepartment>(
   },
 );
 
-// When Create Academic Department Check Exist or not Before Save Using Pre hooks
-academicDepartmentSchema.pre('save', async function (next) {
-  // Is Exist or not
-  const isExistDepartment = await AcademicDepartment.findOne({
-    name: this.name,
-  });
-  if (isExistDepartment) {
-    throw new AppError(400, 'This Academic Department is Already Exist!');
-  }
-  next();
-});
+// // When Create Academic Department Check Exist or not Before Save Using Pre hooks
+// academicDepartmentSchema.pre('save', async function (next) {
+//   // Is Exist or not
+//   const isExistDepartment = await AcademicDepartment.findOne({
+//     name: this.name,
+//   });
+//   if (isExistDepartment) {
+//     throw new AppError(400, 'This Academic Department is Already Exist!');
+//   }
+//   next();
+// });
 
 // Check Data is Exist or Not When Update an Academic Department
 academicDepartmentSchema.pre('findOneAndUpdate', async function (next) {

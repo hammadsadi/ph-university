@@ -8,4 +8,5 @@ export default {
   mongoose_url: process.env.MONGO_URL,
   bcrypt_solr_round: process.env.BCRYPT_SOLT_ROUND,
   default_password: process.env.DEFAULT_PASS,
+  node_env: process.env.NODE_ENV,
 };
