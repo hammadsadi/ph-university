@@ -7,6 +7,7 @@ import config from '../config';
 import zodErrorHandler from '../errors/zodErrorHandler';
 import handleValidationError from '../errors/handleValidationError';
 import handleCastError from '../errors/handleCastError';
+import handleDuplicateError from '../errors/handleDuplicateError';
 
 const globalErrorHandler: ErrorRequestHandler = (
   error,
@@ -41,6 +42,12 @@ const globalErrorHandler: ErrorRequestHandler = (
   } else if (error?.name === 'CastError') {
     // Handle CastError
     const errorSimplies = handleCastError(error);
+    statusCode = errorSimplies.statusCode;
+    message = errorSimplies.message;
+    errorResources = errorSimplies.errorResources;
+  } else if (error?.code === 11000) {
+    // Handle CastError
+    const errorSimplies = handleDuplicateError(error);
     statusCode = errorSimplies.statusCode;
     message = errorSimplies.message;
     errorResources = errorSimplies.errorResources;
