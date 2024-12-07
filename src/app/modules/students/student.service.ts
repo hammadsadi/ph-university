@@ -50,8 +50,8 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
 
   // Limit
   let page = 1;
-  let skip = 0;
   let limit = 2;
+  let skip = 0;
   if (query.limit) {
     limit = Number(query.limit);
   }
