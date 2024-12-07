@@ -5,9 +5,24 @@ import AppError from '../../errors/AppError';
 import { User } from '../users/user.model';
 
 // Get All Student
-const getAllStudentFromDB = async () => {
+const getAllStudentFromDB = async (query: Record<string, unknown>) => {
+  let searchTerm = '';
+  // Check Query
+  if (query.searchTerm) {
+    searchTerm = query.searchTerm as string;
+  }
   // Get All Student
-  const result = await Student.find()
+  const result = await Student.find({
+    $or: [
+      'email',
+      'name.firstName',
+      'name.lastName',
+      'presentAddress.city',
+      'permanentAddress.city',
+    ].map((field) => ({
+      [field]: { $regex: searchTerm, $options: 'i' },
+    })),
+  })
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
