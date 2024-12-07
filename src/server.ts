@@ -9,7 +9,7 @@ async function main() {
 
   try {
     server = app.listen(config.port, () => {
-      console.log(`PH Unuversity API Connected ${config.port}`);
+      console.log(`✅ PH Unuversity API Connected ${config.port}`);
     });
   } catch (error) {
     console.log(error);

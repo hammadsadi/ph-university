@@ -6,13 +6,16 @@ import { User } from '../users/user.model';
 
 // Get All Student
 const getAllStudentFromDB = async (query: Record<string, unknown>) => {
+  // Query Object Copy
+  const queryObj = { ...query };
   let searchTerm = '';
   // Check Query
   if (query.searchTerm) {
     searchTerm = query.searchTerm as string;
   }
-  // Get All Student
-  const result = await Student.find({
+
+  // Searching Student
+  const searchStudent = Student.find({
     $or: [
       'email',
       'name.firstName',
@@ -22,7 +25,13 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
     ].map((field) => ({
       [field]: { $regex: searchTerm, $options: 'i' },
     })),
-  })
+  });
+  // Get All Student and Filter
+  const excludeField = ['searchTerm'];
+  excludeField.forEach((el) => delete queryObj[el]);
+
+  const result = await searchStudent
+    .find(queryObj)
     .populate('admissionSemester')
     .populate({
       path: 'academicDepartment',
