@@ -27,10 +27,10 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
     })),
   });
   // Get All Student and Filter
-  const excludeField = ['searchTerm'];
+  const excludeField = ['searchTerm', 'sort'];
   excludeField.forEach((el) => delete queryObj[el]);
 
-  const result = await searchStudent
+  const filterQuery = searchStudent
     .find(queryObj)
     .populate('admissionSemester')
     .populate({
@@ -39,7 +39,16 @@ const getAllStudentFromDB = async (query: Record<string, unknown>) => {
         path: 'academicFaculty',
       },
     });
-  return result;
+
+  // Sorting
+  let sort = '-createdAt';
+  if (query.sort) {
+    sort = query.sort as string;
+  }
+
+  const sortQuery = await filterQuery.sort(sort);
+
+  return sortQuery;
 };
 
 // Get Single Student
