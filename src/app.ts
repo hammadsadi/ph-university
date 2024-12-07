@@ -10,7 +10,8 @@ app.use(express.json());
 app.use(cors());
 
 app.get('/', (req: Request, res: Response) => {
-  res.send('Server Running Now');
+  Promise.reject();
+  // res.send('Server Running Now');
 });
 
 // Application Route

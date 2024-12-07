@@ -8,6 +8,7 @@ import zodErrorHandler from '../errors/zodErrorHandler';
 import handleValidationError from '../errors/handleValidationError';
 import handleCastError from '../errors/handleCastError';
 import handleDuplicateError from '../errors/handleDuplicateError';
+import AppError from '../errors/AppError';
 
 const globalErrorHandler: ErrorRequestHandler = (
   error,
@@ -16,8 +17,8 @@ const globalErrorHandler: ErrorRequestHandler = (
   // eslint-disable-next-line no-unused-vars
   next,
 ) => {
-  let statusCode = error.statusCode || 500;
-  let message = error.message || 'Something Went Wrong';
+  let statusCode = 500;
+  let message = 'Something Went Wrong';
 
   // Error
   let errorResources: TErrorResources = [
@@ -51,6 +52,25 @@ const globalErrorHandler: ErrorRequestHandler = (
     statusCode = errorSimplies.statusCode;
     message = errorSimplies.message;
     errorResources = errorSimplies.errorResources;
+  } else if (error instanceof AppError) {
+    // Handle Throw New Error
+    statusCode = error?.statusCode;
+    message = error.message;
+    errorResources = [
+      {
+        path: '',
+        message: error?.message,
+      },
+    ];
+  } else if (error instanceof Error) {
+    // Handle Error
+    message = error.message;
+    errorResources = [
+      {
+        path: '',
+        message: error?.message,
+      },
+    ];
   }
   res.status(statusCode).json({
     success: false,
