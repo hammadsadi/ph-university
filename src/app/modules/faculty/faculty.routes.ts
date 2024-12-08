@@ -7,12 +7,12 @@ const route = Router();
 
 // Get All Student
 route.get('/', FacultyControllers.getAllFaculty);
-route.get('/:facultyId', FacultyControllers.getSingleFaculty);
+route.get('/:id', FacultyControllers.getSingleFaculty);
 route.patch(
-  '/:facultyId',
+  '/:id',
   validateRequest(FacultyValidationSchemas.updateFacultyValidationSchema),
   FacultyControllers.updateSingleFaculty,
 );
-route.delete('/:facultyId', FacultyControllers.deleteSingleFaculty);
+route.delete('/:id', FacultyControllers.deleteSingleFaculty);
 
 export const FacultyRoutes = route;

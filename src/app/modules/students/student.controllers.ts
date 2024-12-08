@@ -19,12 +19,24 @@ const getAllStudents = catchAsync(async (req, res, next) => {
  * Get Single Student
  */
 const getSingleStudent = catchAsync(async (req, res, next) => {
-  const result = await StudentServices.getSingleStudentFromDB(
-    req.params.studentId,
-  );
+  const result = await StudentServices.getSingleStudentFromDB(req.params.id);
   sendResponse(res, {
     success: true,
     message: 'Single Srudent Get Successful',
+    data: result,
+  });
+});
+
+/**
+ * Update Single Student
+ */
+const updateSingleStudent = catchAsync(async (req, res, next) => {
+  const { id } = req.params;
+  const { student } = req.body;
+  const result = await StudentServices.updateSingleStudentFromDB(id, student);
+  sendResponse(res, {
+    success: true,
+    message: 'Single Student Updated Successful',
     data: result,
   });
 });
@@ -33,33 +45,12 @@ const getSingleStudent = catchAsync(async (req, res, next) => {
 /**
  * Update Single Student
  */
-const updateSingleStudent= catchAsync(
-  async (req, res, next) => {
-    const { studentId } = req.params;
-    const { student } = req.body;
-    const result = await StudentServices.updateSingleStudentFromDB(
-      studentId,
-      student,
-    );
-    sendResponse(res, {
-      success: true,
-      message: 'Single Student Updated Successful',
-      data: result,
-    });
-  },
-);
-
-
-/**
- * Update Single Student
- */
 const deleteSingleStudent= catchAsync(
   async (req, res, next) => {
     
-    const result =
-      await StudentServices.deleteSingleStudentFromDB(
-        req.params.studentId,
-      );
+    const result = await StudentServices.deleteSingleStudentFromDB(
+      req.params.id,
+    );
     sendResponse(res, {
       success: true,
       message: 'Single Student Deleted Successful',

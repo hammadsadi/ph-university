@@ -22,7 +22,7 @@ const getAllAdminFromDB = async () => {
  * @Method GET
  */
 const getSingleAdminFromDB = async (id: string) => {
-  const result = await Admin.findOne({ id }).populate('user');
+  const result = await Admin.findById(id).populate('user');
 
   return result;
 };
@@ -62,7 +62,7 @@ const updateSingleAdminFromDB = async (
     }
   }
 
-  const result = await Admin.findOneAndUpdate({ id }, modefiedData, {
+  const result = await Admin.findByIdAndUpdate(id, modefiedData, {
     new: true,
     runValidators: true,
   });
@@ -82,8 +82,8 @@ const deleteSingleAdminFromDB = async (id: string) => {
   try {
     // Start Transaction
     session.startTransaction();
-    const deletedAdmin = await Admin.findOneAndUpdate(
-      { id },
+    const deletedAdmin = await Admin.findByIdAndUpdate(
+      id,
       { isDeleted: true },
       { new: true, session },
     );
@@ -92,9 +92,11 @@ const deleteSingleAdminFromDB = async (id: string) => {
       throw new AppError(400, 'Admin Deleted Failed!');
     }
 
+    // User Id
+    const userId = deletedAdmin.user;
     // Find and Delete User
     const deletedUser = await User.findOneAndUpdate(
-      { id },
+      userId,
       { isDeleted: true },
       { new: true, session },
     );

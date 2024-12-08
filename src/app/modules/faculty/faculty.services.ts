@@ -3,6 +3,8 @@ import { TFaculty } from './faculty.interface';
 import { Faculty } from './faculty.model';
 import AppError from '../../errors/AppError';
 import { User } from '../users/user.model';
+import QueryBuilder from '../../builder/QueryBuilder';
+import { FacujltySearchAbleFileds } from './faculty.constant';
 
 /**
  * @Description  Get All Feaculty
@@ -10,15 +12,24 @@ import { User } from '../users/user.model';
  * @returns Data
  * @Method GET
  */
-const getAllFacultyFromDB = async () => {
-  const result = await Faculty.find()
-    .populate('user')
-    .populate({
-      path: 'academicDepartment',
-      populate: {
-        path: 'academicFaculty',
-      },
-    });
+const getAllFacultyFromDB = async (query: Record<string, unknown>) => {
+  const facultyQuery = new QueryBuilder(
+    Faculty.find()
+      .populate('user')
+      .populate({
+        path: 'academicDepartment',
+        populate: {
+          path: 'academicFaculty',
+        },
+      }),
+    query,
+  )
+    .search(FacujltySearchAbleFileds)
+    .filter()
+    .sort()
+    .pagination()
+    .fields();
+  const result = await facultyQuery.modelQuery;
   return result;
 };
 
@@ -29,7 +40,7 @@ const getAllFacultyFromDB = async () => {
  * @Method GET
  */
 const getSingleFacultyFromDB = async (id: string) => {
-  const result = await Faculty.findOne({ id })
+  const result = await Faculty.findById(id)
     .populate('user')
     .populate({
       path: 'academicDepartment',
@@ -75,7 +86,7 @@ const updateSingleFacultyFromDB = async (
     }
   }
 
-  const result = await Faculty.findOneAndUpdate({ id }, modefiedData, {
+  const result = await Faculty.findByIdAndUpdate(id, modefiedData, {
     new: true,
     runValidators: true,
   });
@@ -95,8 +106,8 @@ const deleteSingleFacultyFromDB = async (id: string) => {
   try {
     // Start Transaction
     session.startTransaction();
-    const deletedFaculty = await Faculty.findOneAndUpdate(
-      { id },
+    const deletedFaculty = await Faculty.findByIdAndUpdate(
+      id,
       { isDeleted: true },
       { new: true, session },
     );
@@ -104,10 +115,12 @@ const deleteSingleFacultyFromDB = async (id: string) => {
     if (!deletedFaculty) {
       throw new AppError(400, 'Faculty Deleted Failed!');
     }
+    // User Id
+    const userId = deletedFaculty.user;
 
     // Find and Delete User
-    const deletedUser = await User.findOneAndUpdate(
-      { id },
+    const deletedUser = await User.findByIdAndUpdate(
+      userId,
       { isDeleted: true },
       { new: true, session },
     );

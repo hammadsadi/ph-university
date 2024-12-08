@@ -7,12 +7,12 @@ const route = Router();
 
 // Get All Student
 route.get('/all-students', StudentsControllers.getAllStudents);
-route.get('/:studentId', StudentsControllers.getSingleStudent);
+route.get('/:id', StudentsControllers.getSingleStudent);
 route.patch(
-  '/:studentId',
+  '/:id',
   validateRequest(studentValidationSchemas.updateValidationStudentSchema),
   StudentsControllers.updateSingleStudent,
 );
-route.delete('/:studentId', StudentsControllers.deleteSingleStudent);
+route.delete('/:id', StudentsControllers.deleteSingleStudent);
 
 export const StudentsRoutes = route;

@@ -185,4 +185,17 @@ studentSchema.pre('findOneAndUpdate', async function (next) {
   next();
 });
 
+
+// When Create Student Check Exist or not Before Save Using Pre hooks
+studentSchema.pre('save', async function (next) {
+  // Is Exist or not
+  const isExistStudent = await Student.findOne({
+    email: this.email,
+  });
+  if (isExistStudent) {
+    throw new AppError(400, 'This Student is Already Exist!');
+  }
+  next();
+});
+
 export const Student = model('Student', studentSchema);

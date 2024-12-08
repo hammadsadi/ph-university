@@ -8,12 +8,12 @@ const route = Router();
 
 // Get All Student
 route.get('/', AdminControllers.getAllAdmin);
-route.get('/:adminId', AdminControllers.getSingleAdmin);
+route.get('/:id', AdminControllers.getSingleAdmin);
 route.patch(
-  '/:adminId',
+  '/:id',
   validateRequest(AdminValidationSchemas.updateValidationAdminSchema),
   AdminControllers.updateSingleAdmin,
 );
-route.delete('/:adminId', AdminControllers.deleteSingleAdmin);
+route.delete('/:id', AdminControllers.deleteSingleAdmin);
 
 export const AdminRoutes = route;

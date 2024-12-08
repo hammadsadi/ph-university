@@ -12,3 +12,13 @@ export const BloodGroup: TBloodGroup[] = [
 ];
 
 export const Gender: TGender[] = ['Male', 'Female'];
+
+export const FacujltySearchAbleFileds = [
+  'email',
+  'id',
+  'contactNo',
+  'emergencyContactNo',
+  'name.firstName',
+  'name.middleName',
+  'name.lastName',
+];

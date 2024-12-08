@@ -157,7 +157,7 @@ const updateValidationStudentSchema = z
       }),
     }),
   })
-  .optional();
+
 
 export const studentValidationSchemas = {
   createValidationStudentSchema,
