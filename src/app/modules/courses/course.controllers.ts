@@ -2,6 +2,25 @@ import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { CourseServices } from './course.services';
 
+
+/**
+ * @Description  Create New Course
+ * @param ''
+ * @returns Response with data
+ * @Method POST
+ */
+
+const createCourse = catchAsync(async (req, res, next) => {
+  const result = await CourseServices.courseSaveToDB(req.body);
+  sendResponse(res, {
+    success: true,
+    message: 'Courses Created Successful',
+    data: result,
+  });
+});
+
+
+
 /**
  * @Description  Get All Course
  * @param ''
@@ -74,4 +93,5 @@ export const CourseControllers = {
   getSingleCourse,
   //   updateSingleAdmin,
   deleteSingleCourse,
+  createCourse,
 };

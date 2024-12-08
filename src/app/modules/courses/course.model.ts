@@ -1,10 +1,12 @@
 import { model, Schema } from 'mongoose';
 import { TCourse, TPreRequisiteCourses } from './course.interface';
+import AppError from '../../errors/AppError';
 
 // Pre Requisite Course Schema
 const preRequisiteSchema = new Schema<TPreRequisiteCourses>({
   course: {
     type: Schema.Types.ObjectId,
+    ref: 'Course',
   },
   isDeleted: {
     type: Boolean,
@@ -41,5 +43,17 @@ const courseSchema = new Schema<TCourse>(
     timestamps: true,
   },
 );
+
+// When Create Course Check Exist or not Before Save Using Pre hooks
+courseSchema.pre('save', async function (next) {
+  // Is Exist or not
+  const isExistCourse = await Course.findOne({
+    title: this.title,
+  });
+  if (isExistCourse) {
+    throw new AppError(400, 'This Course is Already Exist!');
+  }
+  next();
+});
 
 export const Course = model<TCourse>('Course', courseSchema);

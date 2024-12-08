@@ -10,7 +10,7 @@ import { FacultyServices } from './faculty.services';
  */
 
 const getAllFaculty = catchAsync(async (req, res, next) => {
-  const result = await FacultyServices.getAllFacultyFromDB();
+  const result = await FacultyServices.getAllFacultyFromDB(req.query);
   sendResponse(res, {
     success: true,
     message: 'Faculty Get Successful',
