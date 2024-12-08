@@ -15,6 +15,22 @@ const userCreate = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ *
+ * @Desc Faculty Controller
+ * @returns Response with Data
+ * @method POST
+ */
+const facultyCreate = catchAsync(async (req, res, next) => {
+  const result = await userServices.facultySaveToDB(req.body);
+  sendResponse(res, {
+    success: true,
+    message: 'Faculty Created Successful',
+    data: result,
+  });
+});
+
 export const userControllers = {
   userCreate,
+  facultyCreate,
 };
