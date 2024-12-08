@@ -13,10 +13,6 @@ route.patch(
   validateRequest(FacultyValidationSchemas.updateFacultyValidationSchema),
   FacultyControllers.updateSingleFaculty,
 );
-// route.patch(
-//   '/:studentId',
-//   validateRequest(studentValidationSchemas.updateValidationStudentSchema),
-//   StudentsControllers.updateSingleStudent,
-// );
+route.delete('/:facultyId', FacultyControllers.deleteSingleFaculty);
 
 export const FacultyRoutes = route;

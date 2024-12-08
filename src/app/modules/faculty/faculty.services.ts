@@ -1,5 +1,8 @@
+import mongoose from 'mongoose';
 import { TFaculty } from './faculty.interface';
 import { Faculty } from './faculty.model';
+import AppError from '../../errors/AppError';
+import { User } from '../users/user.model';
 
 /**
  * @Description  Get All Feaculty
@@ -79,8 +82,54 @@ const updateSingleFacultyFromDB = async (
 
   return result;
 };
+
+/**
+ * @Description  Delete Single Feaculty
+ * @param '
+ * @returns Data
+ * @Method DELETE
+ */
+const deleteSingleFacultyFromDB = async (id: string) => {
+  // Init Session
+  const session = await mongoose.startSession();
+  try {
+    // Start Transaction
+    session.startTransaction();
+    const deletedFaculty = await Faculty.findOneAndUpdate(
+      { id },
+      { isDeleted: true },
+      { new: true, session },
+    );
+    // Validation
+    if (!deletedFaculty) {
+      throw new AppError(400, 'Faculty Deleted Failed!');
+    }
+
+    // Find and Delete User
+    const deletedUser = await User.findOneAndUpdate(
+      { id },
+      { isDeleted: true },
+      { new: true, session },
+    );
+    // Validation
+    if (!deletedUser) {
+      throw new AppError(400, 'User Deleted Failed!');
+    }
+    // Session Commit or Data Save
+    await session.commitTransaction();
+    // End Session
+    await session.endSession();
+    return deletedFaculty;
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new AppError(400, 'Failed to Delete Faculty Data');
+  }
+};
+
 export const FacultyServices = {
   getAllFacultyFromDB,
   getSingleFacultyFromDB,
   updateSingleFacultyFromDB,
+  deleteSingleFacultyFromDB,
 };
