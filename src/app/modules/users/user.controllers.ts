@@ -30,7 +30,23 @@ const facultyCreate = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ *
+ * @Desc Admin Controller
+ * @returns Response with Data
+ * @method POST
+ */
+const adminCreate = catchAsync(async (req, res, next) => {
+  const result = await userServices.adminSaveToDB(req.body);
+  sendResponse(res, {
+    success: true,
+    message: 'Admin Created Successful',
+    data: result,
+  });
+});
+
 export const userControllers = {
   userCreate,
   facultyCreate,
+  adminCreate,
 };

@@ -5,13 +5,14 @@ import { TUser } from './user.interface';
 import { User } from './user.model';
 import { TStudent } from '../students/student.interface';
 import { Student } from '../students/student.mode';
-import { generatedId, generateFacultyId } from './user.utils';
+import { generateAdminId, generatedId, generateFacultyId } from './user.utils';
 import { AdmissionSemester } from '../admissionSemester/admission.semester.model';
 import mongoose from 'mongoose';
 import AppError from '../../errors/AppError';
 import { Faculty } from '../faculty/faculty.model';
 import { TFaculty } from '../faculty/faculty.interface';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
+import { Admin } from '../admin/admin.model';
 
 // User Save to DB
 const userSaveToDB = async (password: string, payload: TStudent) => {
@@ -117,7 +118,59 @@ const facultySaveToDB = async (payload: TFaculty) => {
   }
 };
 
+/**
+ *
+ * @Desc Admin Save to Database
+ * @returns Data
+ * @method POST
+ */
+const adminSaveToDB = async (payload: TFaculty) => {
+  // User Data
+  const userData: Partial<TUser> = {};
+
+  // Set User Role
+  userData.role = 'admin';
+  // Set User Password
+  userData.password = payload?.password || config.default_password;
+
+  // Start Session
+  const session = await mongoose.startSession();
+  try {
+    // Start Transaction
+    session.startTransaction();
+    // Generate Faculty Id
+    userData.id = await generateAdminId();
+
+    // Create User
+    const newsUser = await User.create([userData], { session }); // Return Array
+    // Check
+    if (!newsUser.length) {
+      throw new AppError(400, 'Failed To Create User!');
+    }
+
+    // Set Id and _id as a User
+    payload.id = newsUser[0].id; // Gen Id
+    payload.user = newsUser[0]._id; // Ref Id
+
+    // Create Admin
+    const newAdmin = await Admin.create([payload], { session }); // It Return Array
+    // Check
+    if (!newAdmin) {
+      throw new AppError(400, 'Failed To Create Admin!');
+    }
+
+    await session.commitTransaction();
+    await session.endSession();
+    return newAdmin;
+  } catch (err) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new Error(err);
+  }
+};
+
 export const userServices = {
   userSaveToDB,
   facultySaveToDB,
+  adminSaveToDB,
 };

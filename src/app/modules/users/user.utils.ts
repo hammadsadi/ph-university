@@ -68,3 +68,39 @@ increamentId = `F-${increamentId}`
 return increamentId
 
 }
+
+
+
+// Get Last Admin ID
+export const findLastAdminId = async () => {
+  const lastadmin = await User.findOne(
+    {
+      role: 'admin',
+    },
+    {
+      id: 1,
+      _id: 0,
+    },
+  )
+    .sort({
+      createdAt: -1,
+    })
+    .lean();
+
+  return lastadmin?.id ? lastadmin.id.substring(2) : undefined;
+};
+
+// Generate Admin ID
+export const generateAdminId = async() =>{
+  let currentId =(0).toString()
+
+  // Last Admin Id
+  const lastAdminId = await findLastAdminId()
+  if(lastAdminId){
+    currentId = lastAdminId.substring(2)
+  }
+  let increamentId = (Number(currentId)+1).toString().padStart(4, '0')
+increamentId = `A-${increamentId}`
+return increamentId
+
+}
