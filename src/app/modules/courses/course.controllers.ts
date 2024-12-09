@@ -1,7 +1,8 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { CourseServices } from './course.services';
-
 
 /**
  * @Description  Create New Course
@@ -19,7 +20,25 @@ const createCourse = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * @Description  Assign Faculties with Course
+ * @param courseId
+ * @returns Response with data
+ * @Method POST
+ */
 
+const assignFacultiesWuthCourse = catchAsync(async (req, res, next) => {
+  const { courseId } = req.params;
+  const result = await CourseServices.assignFacultiesWithCoursesIntoDB(
+    courseId,
+    req.body,
+  );
+  sendResponse(res, {
+    success: true,
+    message: 'Assigned Faculties With Coureses Successful',
+    data: result,
+  });
+});
 
 /**
  * @Description  Get All Course
@@ -29,7 +48,7 @@ const createCourse = catchAsync(async (req, res, next) => {
  */
 
 const getAllCourses = catchAsync(async (req, res, next) => {
-  const result = await CourseServices.getAllCourseFromDB();
+  const result = await CourseServices.getAllCourseFromDB(req.query);
   sendResponse(res, {
     success: true,
     message: 'Courses Get Successful',
@@ -39,7 +58,7 @@ const getAllCourses = catchAsync(async (req, res, next) => {
 
 /**
  * @Description  Get Single Course
- * @param ''
+ * @param id
  * @returns Response with data
  * @Method GET
  */
@@ -55,7 +74,7 @@ const getSingleCourse = catchAsync(async (req, res, next) => {
 
 /**
  * @Description  Update Single Course
- * @param ''
+ * @param id
  * @returns Response with data
  * @Method PATCH
  */
@@ -74,7 +93,7 @@ const updateSingleCourse = catchAsync(async (req, res, next) => {
 
 /**
  * @Description  Delete Single Course
- * @param ''
+ * @param id
  * @returns Response with data
  * @Method DELETE
  */
@@ -94,4 +113,5 @@ export const CourseControllers = {
   updateSingleCourse,
   deleteSingleCourse,
   createCourse,
+  assignFacultiesWuthCourse,
 };
