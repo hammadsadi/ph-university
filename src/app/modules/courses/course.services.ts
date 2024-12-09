@@ -50,25 +50,35 @@ const updateSingleCourseFromDB = async (
   payload: Partial<TCourse>,
 ) => {
   const { preRequisiteCourses, ...remainingCouresInfo } = payload;
-  const basicCourseUpdatedResult = await Course.findByIdAndUpdate(
-    id,
-    remainingCouresInfo,
-    {
-      new: true,
-      runValidators: true,
-    },
-  );
+   await Course.findByIdAndUpdate(id, remainingCouresInfo, {
+     new: true,
+     runValidators: true,
+   });
 
-  // Check Pre Requisite Exist or Not
-  if (preRequisiteCourses && preRequisiteCourses.length > 0) {
-    const deletedRequisite = preRequisiteCourses
-      .filter((el) => el.course && el.isDeleted)
-      .map((el) => el.course);
-    const deletedPreRequisiteCourses = await Course.findByIdAndUpdate(id, {
-      $pull: { preRequisiteCourses: { course: { $in: deletedRequisite } } },
-    });
-  }
-  return basicCourseUpdatedResult;
+   // Check Pre Requisite Exist or Not
+   if (preRequisiteCourses && preRequisiteCourses.length > 0) {
+     // Filter out the Deleted Field
+     const deletedRequisite = preRequisiteCourses
+       .filter((el) => el.course && el.isDeleted)
+       .map((el) => el.course);
+     await Course.findByIdAndUpdate(id, {
+       $pull: { preRequisiteCourses: { course: { $in: deletedRequisite } } },
+     });
+
+     // Filter out New Pre Requisite Courses
+     const newPreRequisite = preRequisiteCourses?.filter(
+       (el) => el.course && !el.isDeleted,
+     );
+     await Course.findByIdAndUpdate(id, {
+       $addToSet: { preRequisiteCourses: { $each: newPreRequisite } },
+     });
+   }
+
+   // Get Again Data
+   const result = await Course.findById(id).populate(
+     'preRequisiteCourses.course',
+   );
+   return result;
 };
 
 /**
