@@ -14,11 +14,11 @@ route.post(
 );
 route.get('/', CourseControllers.getAllCourses);
 route.get('/:id', CourseControllers.getSingleCourse);
-// route.patch(
-//   '/:id',
-//   validateRequest(AdminValidationSchemas.updateValidationAdminSchema),
-//   AdminControllers.updateSingleAdmin,
-// );
+route.patch(
+  '/:id',
+  validateRequest(CourseValidationSchemas.updateCourseValidationSchema),
+  CourseControllers.updateSingleCourse,
+);
 route.delete('/:id', CourseControllers.deleteSingleCourse);
 
 export const CourseRoutes = route;

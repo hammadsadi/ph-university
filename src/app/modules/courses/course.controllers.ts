@@ -60,17 +60,17 @@ const getSingleCourse = catchAsync(async (req, res, next) => {
  * @Method PATCH
  */
 
-// const updateSingleAdmin = catchAsync(async (req, res, next) => {
-//   const result = await AdminServices.updateSingleAdminFromDB(
-//     req.params.id,
-//     req.body,
-//   );
-//   sendResponse(res, {
-//     success: true,
-//     message: 'Single Admin Updated Successful',
-//     data: result,
-//   });
-// });
+const updateSingleCourse = catchAsync(async (req, res, next) => {
+  const result = await CourseServices.updateSingleCourseFromDB(
+    req.params.id,
+    req.body,
+  );
+  sendResponse(res, {
+    success: true,
+    message: 'Single Course Updated Successful',
+    data: result,
+  });
+});
 
 /**
  * @Description  Delete Single Course
@@ -91,7 +91,7 @@ const deleteSingleCourse = catchAsync(async (req, res, next) => {
 export const CourseControllers = {
   getAllCourses,
   getSingleCourse,
-  //   updateSingleAdmin,
+  updateSingleCourse,
   deleteSingleCourse,
   createCourse,
 };

@@ -35,8 +35,40 @@ const getAllCourseFromDB = async (query: Record<string, unknown>) => {
  @Method GET
  */
 const getSingleCourseFromDB = async (id: string) => {
-  const result = await Course.findById(id);
+  const result = await Course.findById(id).populate(
+    'preRequisiteCourses.course',
+  );
   return result;
+};
+
+/**
+ *@Description Update Course
+ @Method Patch
+ */
+const updateSingleCourseFromDB = async (
+  id: string,
+  payload: Partial<TCourse>,
+) => {
+  const { preRequisiteCourses, ...remainingCouresInfo } = payload;
+  const basicCourseUpdatedResult = await Course.findByIdAndUpdate(
+    id,
+    remainingCouresInfo,
+    {
+      new: true,
+      runValidators: true,
+    },
+  );
+
+  // Check Pre Requisite Exist or Not
+  if (preRequisiteCourses && preRequisiteCourses.length > 0) {
+    const deletedRequisite = preRequisiteCourses
+      .filter((el) => el.course && el.isDeleted)
+      .map((el) => el.course);
+    const deletedPreRequisiteCourses = await Course.findByIdAndUpdate(id, {
+      $pull: { preRequisiteCourses: { course: { $in: deletedRequisite } } },
+    });
+  }
+  return basicCourseUpdatedResult;
 };
 
 /**
@@ -53,4 +85,5 @@ export const CourseServices = {
   getAllCourseFromDB,
   getSingleCourseFromDB,
   deleteSingleCourseFromDB,
+  updateSingleCourseFromDB,
 };

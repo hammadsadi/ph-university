@@ -38,6 +38,10 @@ const courseSchema = new Schema<TCourse>(
       trim: true,
     },
     preRequisiteCourses: [preRequisiteSchema],
+    isDeleted: {
+      type: Boolean,
+      default: false,
+    },
   },
   {
     timestamps: true,
