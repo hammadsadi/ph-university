@@ -1,9 +1,14 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { AcademicDepartmentServices } from './academicDepartment.services';
 
 /**
- * Create Academic Academic Department
+ * @Description  Create Academic Academic Department
+ * @param ''
+ * @returns Response with data
+ * @Method POST
  */
 const academicDepartmentCreate = catchAsync(async (req, res, next) => {
   const result = await AcademicDepartmentServices.academicDepartmentSaveToDB(
@@ -17,7 +22,10 @@ const academicDepartmentCreate = catchAsync(async (req, res, next) => {
 });
 
 /**
- * Get All Academic Department
+ * @Description  Get All Academic Department
+ * @param ''
+ * @returns Response with data
+ * @Method GET
  */
 const getAllAcademicDepartment = catchAsync(async (req, res, next) => {
   const result =
@@ -30,7 +38,10 @@ const getAllAcademicDepartment = catchAsync(async (req, res, next) => {
 });
 
 /**
- * Get Single Academic Department
+ * @Description  Get Single Academic Department
+ * @param departmentId
+ * @returns Response with data
+ * @Method GET
  */
 const getSingleAcademicDepartment = catchAsync(async (req, res, next) => {
   const result =
@@ -45,7 +56,10 @@ const getSingleAcademicDepartment = catchAsync(async (req, res, next) => {
 });
 
 /**
- * Update Single Academic Department
+ * @Description  Update Single Academic Department
+ * @param departmentId
+ * @returns Response with data
+ * @Method PATCH
  */
 const updateSingleAcademicDepartment = catchAsync(async (req, res, next) => {
   const result =

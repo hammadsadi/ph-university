@@ -1,9 +1,14 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { AcademicFacultyServices } from './academic.faculty.services';
 
 /**
- * Create Academic Feaculty Controller
+ * @Description  Create Academic Feaculty Controller
+ * @param ''
+ * @returns Response with data
+ * @Method POST
  */
 const academicFeacultyCreate = catchAsync(async (req, res, next) => {
   const result = await AcademicFacultyServices.academicFacultySaveToDB(
@@ -17,7 +22,10 @@ const academicFeacultyCreate = catchAsync(async (req, res, next) => {
 });
 
 /**
- * Get All Academic Feaculty Controller
+ * @Description  Get All Academic Feaculty Controller
+ * @param ''
+ * @returns Response with data
+ * @Method GET
  */
 const getAllAcademicFeaculty = catchAsync(async (req, res, next) => {
   const result = await AcademicFacultyServices.getAllAcademicFeacultyFromDB();
@@ -29,7 +37,10 @@ const getAllAcademicFeaculty = catchAsync(async (req, res, next) => {
 });
 
 /**
- * Get Single Academic Feaculty Controller
+ * @Description  Get Single Academic Feaculty Controller
+ * @param ''
+ * @returns Response with data
+ * @Method GET
  */
 const getSingleAcademicFeaculty = catchAsync(async (req, res, next) => {
   const result = await AcademicFacultyServices.getSingleAcademicFeacultyFromDB(
@@ -43,7 +54,10 @@ const getSingleAcademicFeaculty = catchAsync(async (req, res, next) => {
 });
 
 /**
- * Update Single Academic Feaculty Controller
+ * @Description  Update Single Academic Feaculty Controller
+ * @param feacultyId
+ * @returns Response with data
+ * @Method PATCH
  */
 const updateSingleAcademicFeacultyControllers = catchAsync(
   async (req, res, next) => {

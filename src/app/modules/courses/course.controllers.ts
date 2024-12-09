@@ -24,7 +24,7 @@ const createCourse = catchAsync(async (req, res, next) => {
  * @Description  Assign Faculties with Course
  * @param courseId
  * @returns Response with data
- * @Method POST
+ * @Method PUT
  */
 
 const assignFacultiesWuthCourse = catchAsync(async (req, res, next) => {
