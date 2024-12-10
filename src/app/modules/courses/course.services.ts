@@ -4,7 +4,7 @@ import mongoose from 'mongoose';
 import QueryBuilder from '../../builder/QueryBuilder';
 import { CourseSearchableFields } from './course.constant';
 import { TCourse, TCourseFaculties } from './course.interface';
-import { Course, CourseFaculties } from './course.model';
+import { Course, CourseFaculty } from './course.model';
 import AppError from '../../errors/AppError';
 
 /**
@@ -24,13 +24,34 @@ const assignFacultiesWithCoursesIntoDB = async (
   id: string,
   payload: Partial<TCourseFaculties>,
 ) => {
-  const result = await CourseFaculties.findByIdAndUpdate(
+  const result = await CourseFaculty.findByIdAndUpdate(
     id,
     {
+      course: id,
       $addToSet: { faculties: { $each: payload } },
     },
     {
       upsert: true,
+      new: true,
+    },
+  );
+  return result;
+};
+
+/**
+ *@Description Remove Faculties From Course
+ @Method DELETE
+ */
+const removeFacultiesFromCoursesIntoDB = async (
+  id: string,
+  payload: Partial<TCourseFaculties>,
+) => {
+  const result = await CourseFaculty.findByIdAndUpdate(
+    id,
+    {
+      $pull: { faculties: { $in: payload } },
+    },
+    {
       new: true,
     },
   );
@@ -165,4 +186,5 @@ export const CourseServices = {
   deleteSingleCourseFromDB,
   updateSingleCourseFromDB,
   assignFacultiesWithCoursesIntoDB,
+  removeFacultiesFromCoursesIntoDB,
 };

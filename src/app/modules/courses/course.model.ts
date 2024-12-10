@@ -66,27 +66,21 @@ courseSchema.pre('save', async function (next) {
 
 export const Course = model<TCourse>('Course', courseSchema);
 
-const courseFacultiesSchema = new Schema<TCourseFaculties>(
-  {
-    course: {
+const courseFacultiesSchema = new Schema<TCourseFaculties>({
+  course: {
+    type: Schema.Types.ObjectId,
+    ref: 'Course',
+    unique: true,
+  },
+  faculties: [
+    {
       type: Schema.Types.ObjectId,
-      ref: 'Course',
-      required: true,
-      unique: true,
+      ref: 'Faculty',
     },
-    faculties: [
-      {
-        type: Schema.Types.ObjectId,
-        ref: 'Faculty',
-      },
-    ],
-  },
-  {
-    timestamps: true,
-  },
-);
+  ],
+});
 
-export const CourseFaculties = model<TCourseFaculties>(
-  'CourseFaculties',
+export const CourseFaculty = model<TCourseFaculties>(
+  'CourseFaculty',
   courseFacultiesSchema,
 );

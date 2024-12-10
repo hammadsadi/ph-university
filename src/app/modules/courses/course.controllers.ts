@@ -31,11 +31,31 @@ const assignFacultiesWuthCourse = catchAsync(async (req, res, next) => {
   const { courseId } = req.params;
   const result = await CourseServices.assignFacultiesWithCoursesIntoDB(
     courseId,
-    req.body,
+    req.body.faculties,
   );
   sendResponse(res, {
     success: true,
     message: 'Assigned Faculties With Coureses Successful',
+    data: result,
+  });
+});
+
+/**
+ * @Description  Remove Faculties From Course
+ * @param courseId
+ * @returns Response with data
+ * @Method DELETE
+ */
+
+const removeFacultiesFromCourse = catchAsync(async (req, res, next) => {
+  const { courseId } = req.params;
+  const result = await CourseServices.removeFacultiesFromCoursesIntoDB(
+    courseId,
+    req.body.faculties,
+  );
+  sendResponse(res, {
+    success: true,
+    message: 'Remove Faculties From Courese Successful',
     data: result,
   });
 });
@@ -114,4 +134,5 @@ export const CourseControllers = {
   deleteSingleCourse,
   createCourse,
   assignFacultiesWuthCourse,
+  removeFacultiesFromCourse,
 };
