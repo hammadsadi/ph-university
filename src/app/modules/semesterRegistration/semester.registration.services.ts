@@ -79,16 +79,28 @@ const singleSemesterRegistrationDataGetFromDB = async (id: string) => {
 };
 
 /**
- * @Description  Get Single Semester Registration
+ * @Description  Update Single Semester Registration
  * @param ''
  * @returns Response with data
- * @Method GET
+ * @Method PATCH
  */
 
-const singleSemesterRegistrationDataUpdateFromDB = async (id: string) => {
-  const result =
-    await SemesterRegistration.findById(id).populate('academicSemester');
-  return result;
+const singleSemesterRegistrationDataUpdateFromDB = async (
+  id: string,
+  payload: Partial<TSemesterRegistration>,
+) => {
+  const checkSemesterRegistration = await SemesterRegistration.findById(id);
+  // Check Data Exist or Not
+  if (!checkSemesterRegistration) {
+    throw new AppError(400, 'This Semester is Not Found!');
+  }
+  // Check Semester Register Status
+  if (checkSemesterRegistration.status === 'ENDED') {
+    throw new AppError(
+      400,
+      `This Semester is Already ${checkSemesterRegistration.status}`,
+    );
+  }
 };
 
 export const SemesterRegistrationServices = {

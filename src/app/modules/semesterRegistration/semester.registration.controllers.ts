@@ -68,7 +68,10 @@ const getSingleSemesterRegistration = catchAsync(async (req, res, next) => {
 
 const updateSingleSemesterRegistration = catchAsync(async (req, res, next) => {
   const result =
-    await SemesterRegistrationServices.singleSemesterRegistrationDataGetFromDB(req.params.id, req.body);
+    await SemesterRegistrationServices.singleSemesterRegistrationDataUpdateFromDB(
+      req.params.id,
+      req.body,
+    );
   sendResponse(res, {
     success: true,
     message: 'Single Semester Registration Updated Successful',
