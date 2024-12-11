@@ -14,10 +14,17 @@ route.post(
   ),
   SemesterRegisterControllers.createSemesterRegistration,
 );
-// Get All Admission Semester
-// route.get(
-//   '/all-admission-semester',
-//   AdmissionSemesterControllers.admissionSemesterGetAllController,
-// );
+// Update Semester Registration
+route.patch(
+  '/:id',
+  validateRequest(
+    SemesterRegistrationValidationSchemas.updateSemesterRegistrationValidationSchema,
+  ),
+  SemesterRegisterControllers.updateSingleSemesterRegistration,
+);
+// Get All  Semester Register
+route.get('/', SemesterRegisterControllers.getSemesterRegistration);
+// Get Single Semester Registration
+route.get('/:id', SemesterRegisterControllers.getSingleSemesterRegistration);
 
 export const SemesterRegistrationRoutes = route;
