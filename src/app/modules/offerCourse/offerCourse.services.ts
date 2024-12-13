@@ -6,6 +6,7 @@ import { Faculty } from '../faculty/faculty.model';
 import { SemesterRegistration } from '../semesterRegistration/semester.registration.model';
 import { TOfferCourse } from './offerCourse.interface';
 import { OfferCourse } from './offerCourse.model';
+import { hasTimeConflict } from './offeredCourse.utils';
 
 /**
  *@Description Create Offer Course
@@ -19,6 +20,9 @@ const offerCourseSaveToDB = async (payload: TOfferCourse) => {
     course,
     section,
     faculty,
+    days,
+    startTime,
+    endTime,
   } = payload;
 
   // Check Semester Registration
@@ -77,8 +81,26 @@ const offerCourseSaveToDB = async (payload: TOfferCourse) => {
     throw new AppError(400, `Offered Course With Section Already Exist!`);
   }
 
-  const result = await OfferCourse.create({ ...payload, admissionSemester });
-  return result;
+  // Get All Offered Course For Validation
+  const assignedSchedule = await OfferCourse.find({
+    semesterRegistration,
+    faculty,
+    days: { $in: days },
+  }).select('days startTime endTime');
+  const newSchedule = {
+    startTime,
+    endTime,
+    days,
+  };
+  if (hasTimeConflict(assignedSchedule, newSchedule)) {
+    throw new AppError(
+      400,
+      `This Feaculty Is Not Avilable at that time! Chose other time or day!`,
+    );
+  }
+  return assignedSchedule;
+  // const result = await OfferCourse.create({ ...payload, admissionSemester });
+  // return result;
 };
 
 export const OfferCourseServices = {
