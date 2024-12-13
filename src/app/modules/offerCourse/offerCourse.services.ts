@@ -17,6 +17,7 @@ const offerCourseSaveToDB = async (payload: TOfferCourse) => {
     academicFecaulty,
     academicDepartment,
     course,
+    section,
     faculty,
   } = payload;
 
@@ -52,6 +53,28 @@ const offerCourseSaveToDB = async (payload: TOfferCourse) => {
   const isFacultyExist = await Faculty.findById(faculty);
   if (!isFacultyExist) {
     throw new AppError(404, 'Faculty Not Found!');
+  }
+
+  // Check if the Department is Belong to The Faculty
+  const isDepartmentBelongToFaculty = await AcademicDepartment.findOne({
+    academicFaculty: academicFecaulty,
+    _id: academicDepartment,
+  });
+  if (!isDepartmentBelongToFaculty) {
+    throw new AppError(
+      404,
+      `This  ${isAcademicDepartmentExist.name} is not belong to this ${isAcademicFecaultyExist.name}`,
+    );
+  }
+
+  // Check Requested Offer Course Section Exist
+  const isOfferCourseSectionExist = await OfferCourse.findOne({
+    semesterRegistration,
+    course,
+    section,
+  });
+  if (isOfferCourseSectionExist) {
+    throw new AppError(400, `Offered Course With Section Already Exist!`);
   }
 
   const result = await OfferCourse.create({ ...payload, admissionSemester });
