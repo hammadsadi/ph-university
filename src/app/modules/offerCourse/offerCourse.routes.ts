@@ -14,27 +14,12 @@ route.post(
   ),
   OfferCourseCOntrollers.createOfferCourse,
 );
-// route.get('/', CourseControllers.getAllCourses);
-// route.get('/:id', CourseControllers.getSingleCourse);
-// route.put(
-//   '/:courseId/assign-faculties',
-//   validateRequest(
-//     CourseValidationSchemas.assignCourseWithFacultiesValidationSchema,
-//   ),
-//   CourseControllers.assignFacultiesWuthCourse,
-// );
-// route.delete(
-//   '/:courseId/remove-faculties',
-//   validateRequest(
-//     CourseValidationSchemas.assignCourseWithFacultiesValidationSchema,
-//   ),
-//   CourseControllers.removeFacultiesFromCourse,
-// );
-// route.patch(
-//   '/:id',
-//   validateRequest(CourseValidationSchemas.updateCourseValidationSchema),
-//   CourseControllers.updateSingleCourse,
-// );
-// route.delete('/:id', CourseControllers.deleteSingleCourse);
-
+// Updated Offered Course
+route.patch(
+  '/:id',
+  validateRequest(
+    OfferCourseValidationSchemas.updateOfferCourseValidationSchema,
+  ),
+  OfferCourseCOntrollers.updatedOfferCourse,
+);
 export const OfferCourseRoutes = route;

@@ -3,15 +3,13 @@
 
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
-
+import { OfferCourseServices } from './offerCourse.services';
 /**
  * @Description  Create Offer Course
  * @param '
  * @returns Response with data
  * @Method POST
  */
-
-import { OfferCourseServices } from './offerCourse.services';
 
 const createOfferCourse = catchAsync(async (req, res, next) => {
   const result = await OfferCourseServices.offerCourseSaveToDB(req.body);
@@ -22,6 +20,26 @@ const createOfferCourse = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ * @Description  Updated Offer Course
+ * @param ID
+ * @returns Response with data
+ * @Method PATCH
+ */
+
+const updatedOfferCourse = catchAsync(async (req, res, next) => {
+  const result = await OfferCourseServices.updatedOfferCourseFromDB(
+    req.params.id,
+    req.body,
+  );
+  sendResponse(res, {
+    success: true,
+    message: 'Offer Course Updated Successful',
+    data: result,
+  });
+});
+
 export const OfferCourseCOntrollers = {
   createOfferCourse,
+  updatedOfferCourse,
 };

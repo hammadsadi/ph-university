@@ -98,11 +98,64 @@ const offerCourseSaveToDB = async (payload: TOfferCourse) => {
       `This Feaculty Is Not Avilable at that time! Chose other time or day!`,
     );
   }
-  return assignedSchedule;
-  // const result = await OfferCourse.create({ ...payload, admissionSemester });
-  // return result;
+  const result = await OfferCourse.create({ ...payload, admissionSemester });
+  return result;
 };
 
+/**
+ *@Description Updated Offer Course
+ @Method PATCH
+ */
+const updatedOfferCourseFromDB = async (
+  id: string,
+  payload: Pick<TOfferCourse, 'faculty' | 'startTime' | 'endTime' | 'days'>,
+) => {
+  const { faculty, startTime, endTime, days } = payload;
+
+  // Check Offered Course
+  const isExistOfferedCourse = await OfferCourse.findById(id);
+  if (!isExistOfferedCourse) {
+    throw new AppError(404, `This Offered Course Not Found!`);
+  }
+
+  // Check Feaculty
+  const isExistFaculty = await Faculty.findById(faculty);
+  if (!isExistFaculty) {
+    throw new AppError(404, `This Faculty Not Found!`);
+  }
+
+  const semesterRegistration = isExistOfferedCourse.semesterRegistration;
+  const checkSemesterRegistrationStatus =
+    await SemesterRegistration.findById(semesterRegistration);
+  if (checkSemesterRegistrationStatus?.status !== 'UPCOMING') {
+    throw new AppError(
+      400,
+      `You Cannot Update This Offered Course Because it is ${checkSemesterRegistrationStatus?.status}`,
+    );
+  }
+  // Get All Offered Course For Validation
+  const assignedSchedule = await OfferCourse.find({
+    semesterRegistration,
+    faculty,
+    days: { $in: days },
+  }).select('days startTime endTime');
+  const newSchedule = {
+    startTime,
+    endTime,
+    days,
+  };
+  if (hasTimeConflict(assignedSchedule, newSchedule)) {
+    throw new AppError(
+      400,
+      `This Feaculty Is Not Avilable at that time! Chose other time or day!`,
+    );
+  }
+  // Now Update Offered Course
+  const result = await OfferCourse.findByIdAndUpdate(id, payload, {
+    new: true,
+  });
+};
 export const OfferCourseServices = {
   offerCourseSaveToDB,
+  updatedOfferCourseFromDB,
 };

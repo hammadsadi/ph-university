@@ -1,6 +1,14 @@
 import { z } from 'zod';
 import { Days } from './offerCourse.contant';
-
+const timeStringSchema = z.string().refine(
+  (time) => {
+    const timeRegex = /^(?:[1-9]|1\d|2[0-3]):[0-5]\d$/;
+    return timeRegex.test(time);
+  },
+  {
+    message: 'Invalid Time Format Expected "HH:MM" in 24 Houes Format',
+  },
+);
 const createOfferCourseValidationSchema = z.object({
   body: z
     .object({
@@ -12,24 +20,8 @@ const createOfferCourseValidationSchema = z.object({
       maxCapacity: z.number(),
       section: z.number(),
       days: z.array(z.enum([...Days] as [string, ...string[]])),
-      startTime: z.string().refine(
-        (time) => {
-          const timeRegex = /^(?:[1-9]|1\d|2[0-3]):[0-5]\d$/;
-          return timeRegex.test(time);
-        },
-        {
-          message: 'Invalid Time Format Expected "HH:MM" in 24 Houes Format',
-        },
-      ),
-      endTime: z.string().refine(
-        (time) => {
-          const timeRegex = /^(?:[1-9]|1\d|2[0-3]):[0-5]\d$/;
-          return timeRegex.test(time);
-        },
-        {
-          message: 'Invalid Time Format Expected "HH:MM" in 24 Houes Format',
-        },
-      ),
+      startTime: timeStringSchema,
+      endTime: timeStringSchema,
     })
     .refine(
       (body) => {
@@ -45,11 +37,11 @@ const createOfferCourseValidationSchema = z.object({
 
 const updateOfferCourseValidationSchema = z.object({
   body: z.object({
-    faculty: z.string().optional(),
-    maxCapacity: z.number().optional(),
-    days: z.array(z.enum([...Days] as [string, ...string[]])).optional(),
-    startTime: z.string().optional(),
-    endTime: z.string().optional(),
+    faculty: z.string(),
+    maxCapacity: z.number(),
+    days: z.array(z.enum([...Days] as [string, ...string[]])),
+    startTime: timeStringSchema,
+    endTime: timeStringSchema,
   }),
 });
 export const OfferCourseValidationSchemas = {
