@@ -38,6 +38,22 @@ const getOfferCourse = catchAsync(async (req, res, next) => {
 });
 
 /**
+ * @Description  Get Single Offer Course
+ * @param ID
+ * @returns Response with data
+ * @Method GET
+ */
+
+const getSingleOfferCourse = catchAsync(async (req, res, next) => {
+  const result = await OfferCourseServices.getSingleOfferCourseFromDB(req.params.id);
+  sendResponse(res, {
+    success: true,
+    message: 'Single Offer Course Get Successful',
+    data: result,
+  });
+});
+
+/**
  * @Description  Updated Offer Course
  * @param ID
  * @returns Response with data
@@ -60,4 +76,5 @@ export const OfferCourseCOntrollers = {
   createOfferCourse,
   updatedOfferCourse,
   getOfferCourse,
+  getSingleOfferCourse,
 };

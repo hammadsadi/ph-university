@@ -171,8 +171,24 @@ const getAllOfferCourseFromDB = async () => {
     .populate('faculty');
   return result;
 };
+/**
+ *@Description Get Single Offer Course
+ @Method GET
+ */
+const getSingleOfferCourseFromDB = async (id:string) => {
+  // GET Single Offered Course
+  const result = await OfferCourse.findById(id)
+    .populate('semesterRegistration')
+    .populate('admissionSemester')
+    .populate('academicFecaulty')
+    .populate('academicDepartment')
+    .populate('course')
+    .populate('faculty');
+  return result;
+};
 export const OfferCourseServices = {
   offerCourseSaveToDB,
   updatedOfferCourseFromDB,
   getAllOfferCourseFromDB,
+  getSingleOfferCourseFromDB,
 };

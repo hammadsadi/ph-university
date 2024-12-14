@@ -15,11 +15,18 @@ route.post(
   OfferCourseCOntrollers.createOfferCourse,
 );
 
-// Updated Offered Course
+// Get All Offered Course
 route.get(
   '/',
   OfferCourseCOntrollers.getOfferCourse,
 );
+
+// Get Single Offered Course
+route.get(
+  '/:id',
+  OfferCourseCOntrollers.getSingleOfferCourse,
+);
+
 // Updated Offered Course
 route.patch(
   '/:id',
