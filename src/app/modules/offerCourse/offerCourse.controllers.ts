@@ -72,9 +72,29 @@ const updatedOfferCourse = catchAsync(async (req, res, next) => {
   });
 });
 
+
+
+/**
+ * @Description  Delete Offer Course
+ * @param ID
+ * @returns Response with data
+ * @Method DELETE
+ */
+
+const deleteOfferCourse = catchAsync(async (req, res, next) => {
+  const result = await OfferCourseServices.deleteSingleOfferCourseFromDB(
+    req.params.id,
+  );
+  sendResponse(res, {
+    success: true,
+    message: 'Offer Course Deleted Successful',
+    data: result,
+  });
+});
 export const OfferCourseCOntrollers = {
   createOfferCourse,
   updatedOfferCourse,
   getOfferCourse,
   getSingleOfferCourse,
+  deleteOfferCourse,
 };

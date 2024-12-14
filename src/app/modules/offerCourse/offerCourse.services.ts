@@ -1,3 +1,4 @@
+import mongoose from 'mongoose';
 import AppError from '../../errors/AppError';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
 import { AcademicFaculty } from '../academicFaculty/academic.faculty.model';
@@ -175,7 +176,7 @@ const getAllOfferCourseFromDB = async () => {
  *@Description Get Single Offer Course
  @Method GET
  */
-const getSingleOfferCourseFromDB = async (id:string) => {
+const getSingleOfferCourseFromDB = async (id: string) => {
   // GET Single Offered Course
   const result = await OfferCourse.findById(id)
     .populate('semesterRegistration')
@@ -186,9 +187,80 @@ const getSingleOfferCourseFromDB = async (id:string) => {
     .populate('faculty');
   return result;
 };
+
+/**
+ *@Description Delete Single Offer Course
+ @Method DELETE
+ */
+const deleteSingleOfferCourseFromDB = async (id: string) => {
+  // Start Session
+  const session = await mongoose.startSession();
+
+  try {
+    // Start Transaction
+    session.startTransaction();
+
+    // Check Offered Course Exist
+    const checkOfferedCourseExist = await OfferCourse.findById(id);
+    if (!checkOfferedCourseExist) {
+      throw new AppError(404, `This Offered Course Not Found!`);
+    }
+
+    // Get Semester Registration ID
+    const semesterRegistration = checkOfferedCourseExist.semesterRegistration;
+    // Check Semester Registration Status
+    const checkSemesterRegistrationStatus = await SemesterRegistration.findById(
+      {
+        _id: semesterRegistration,
+      },
+    );
+
+    if (checkSemesterRegistrationStatus?.status !== 'UPCOMING') {
+      throw new AppError(
+        400,
+        `Offered course can not update ! because the semester ${checkSemesterRegistrationStatus?.status}`,
+      );
+    }
+
+    // Delete All The Associated Pffered Course
+    const deletedOfferedCourses = await OfferCourse.deleteMany(
+      {
+        semesterRegistration,
+      },
+      { session },
+    );
+    // Check Offered Course Deleted or Not
+    if (!deletedOfferedCourses) {
+      throw new AppError(400, `Offered course Deleted Failed!`);
+    }
+
+    // Deleted Semester Registration
+    const deletedSemisterRegistration =
+      await SemesterRegistration.findByIdAndDelete(
+        {
+          _id: semesterRegistration,
+        },
+        { session },
+      );
+    // Check Semester Registration Deleted or Not
+    if (!deletedSemisterRegistration) {
+      throw new AppError(400, `Semester Registration Deleted Failed!`);
+    }
+    // Commit
+    await session.commitTransaction();
+    // End Session
+    await session.endSession();
+    return deletedOfferedCourses;
+  } catch (error) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new AppError(400, 'Offered Course Deleted Failed!');
+  }
+};
 export const OfferCourseServices = {
   offerCourseSaveToDB,
   updatedOfferCourseFromDB,
   getAllOfferCourseFromDB,
   getSingleOfferCourseFromDB,
+  deleteSingleOfferCourseFromDB,
 };

@@ -35,4 +35,9 @@ route.patch(
   ),
   OfferCourseCOntrollers.updatedOfferCourse,
 );
+// Delete Offered Course
+route.delete(
+  '/:id',
+  OfferCourseCOntrollers.deleteOfferCourse,
+);
 export const OfferCourseRoutes = route;
