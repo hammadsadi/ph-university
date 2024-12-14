@@ -155,7 +155,24 @@ const updatedOfferCourseFromDB = async (
     new: true,
   });
 };
+
+/**
+ *@Description Get All Offer Course
+ @Method GET
+ */
+const getAllOfferCourseFromDB = async () => {
+  // GET ALL Offered Course
+  const result = await OfferCourse.find()
+    .populate('semesterRegistration')
+    .populate('admissionSemester')
+    .populate('academicFecaulty')
+    .populate('academicDepartment')
+    .populate('course')
+    .populate('faculty');
+  return result;
+};
 export const OfferCourseServices = {
   offerCourseSaveToDB,
   updatedOfferCourseFromDB,
+  getAllOfferCourseFromDB,
 };

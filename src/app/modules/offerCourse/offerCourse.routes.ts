@@ -14,6 +14,12 @@ route.post(
   ),
   OfferCourseCOntrollers.createOfferCourse,
 );
+
+// Updated Offered Course
+route.get(
+  '/',
+  OfferCourseCOntrollers.getOfferCourse,
+);
 // Updated Offered Course
 route.patch(
   '/:id',
