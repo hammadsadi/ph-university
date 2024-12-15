@@ -1,6 +1,8 @@
+import config from '../../config';
 import AppError from '../../errors/AppError';
 import { User } from '../users/user.model';
 import { TLogin } from './auth.interface';
+import jwt from 'jsonwebtoken';
 /**
  *@Description Login User
  @Method POST
@@ -25,7 +27,19 @@ const userLogin = async (payload: TLogin) => {
     throw new AppError(403, 'Password Do Not Match!');
   }
 
-  return '';
+  // Generate Access Token
+  const jwtPayload = {
+    userId: user?.id,
+    role: user?.role,
+  };
+  const accessToken = jwt.sign(jwtPayload, config.jwt_access_token as string, {
+    expiresIn: '10d',
+  });
+
+  return {
+    accessToken,
+    needsPasswordChange: user?.needsPasswordChange,
+  };
 };
 
 export const AuthServices = {

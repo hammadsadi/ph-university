@@ -9,4 +9,5 @@ export default {
   bcrypt_solr_round: process.env.BCRYPT_SOLT_ROUND,
   default_password: process.env.DEFAULT_PASS,
   node_env: process.env.NODE_ENV,
+  jwt_access_token: process.env.JWT_ACCESS_TOKEN,
 };
