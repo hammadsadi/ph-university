@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import catchAsync from '../../utils/catchAsync';
 import sendResponse from '../../utils/sendResponse';
 import { FacultyServices } from './faculty.services';
@@ -52,7 +54,6 @@ const updateSingleFaculty = catchAsync(async (req, res, next) => {
     data: result,
   });
 });
-
 
 /**
  * @Description  Delete Single Faculty
