@@ -13,6 +13,7 @@ import { FacultyServices } from './faculty.services';
 
 const getAllFaculty = catchAsync(async (req, res, next) => {
   const result = await FacultyServices.getAllFacultyFromDB(req.query);
+  console.log(req.cookies);
   sendResponse(res, {
     success: true,
     message: 'Faculty Get Successful',
