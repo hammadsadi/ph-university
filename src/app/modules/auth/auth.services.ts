@@ -2,8 +2,9 @@ import config from '../../config';
 import AppError from '../../errors/AppError';
 import { User } from '../users/user.model';
 import { TLogin } from './auth.interface';
-import jwt, { JwtPayload } from 'jsonwebtoken';
+import { JwtPayload } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
+import { createToken } from './auth.utils';
 /**
  *@Description Login User
  @Method POST
@@ -33,12 +34,22 @@ const userLogin = async (payload: TLogin) => {
     userId: user?.id,
     role: user?.role,
   };
-  const accessToken = jwt.sign(jwtPayload, config.jwt_access_token as string, {
-    expiresIn: '10d',
-  });
+  // Generate Access Token
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_token as string,
+    config.access_token_experies_in as string,
+  );
+  // Generate Refresh Token
+  const refreshToken = createToken(
+    jwtPayload,
+    config.jwt_refresh_token as string,
+    config.refresh_token_experies_in as string,
+  );
 
   return {
     accessToken,
+    refreshToken,
     needsPasswordChange: user?.needsPasswordChange,
   };
 };
