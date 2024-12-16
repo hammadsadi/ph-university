@@ -18,6 +18,10 @@ export interface UserModel extends Model<TUser> {
     myPlaintextPassword: string,
     hashPass: string,
   ): Promise<boolean>;
+  isJwtIssuedBeforePasswordChanged(
+    passwordChangedTimeStamp: Date,
+    jwtIssuedTimeStamp: number,
+  ): boolean;
 }
 
 // User Tole Type
