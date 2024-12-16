@@ -13,23 +13,17 @@ const authChecking = (...requiredRoles: TUserRole[]) => {
       throw new AppError(401, 'You are not Authorized!');
     }
     // invalid token
-    jwt.verify(
+    const decoded = jwt.verify(
       token,
       config.jwt_access_token as string,
-      function (err, decoded) {
-        // err
-        if (err) {
-          throw new AppError(401, 'You are not Authorized!');
-        }
-        // Check Role
-        const role = (decoded as JwtPayload).role;
-        if (requiredRoles && !requiredRoles.includes(role)) {
-          throw new AppError(401, 'You are not Authorized!');
-        }
-        req.user = decoded as JwtPayload;
-        next();
-      },
-    );
+    ) as JwtPayload;
+    // Check Role
+    const role = decoded.role;
+    if (requiredRoles && !requiredRoles.includes(role)) {
+      throw new AppError(401, 'You are not Authorized!');
+    }
+    req.user = decoded as JwtPayload;
+    next();
   });
 };
 
