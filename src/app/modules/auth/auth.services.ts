@@ -6,6 +6,7 @@ import { JwtPayload } from 'jsonwebtoken';
 import bcrypt from 'bcrypt';
 import { createToken } from './auth.utils';
 import jwt from 'jsonwebtoken';
+import { sendEmail } from '../../utils/sendEmail';
 /**
  *@Description Login User
  @Method POST
@@ -179,6 +180,7 @@ const forgetPassword = async (userId:string) =>{
 
   const resetLink = `http://localhost:3000?id=${user?.id}&token=${resetToken}`;
   console.log(resetLink)
+  sendEmail();
 }
 export const AuthServices = {
   userLogin,
