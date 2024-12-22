@@ -29,4 +29,11 @@ route.post(
   validateRequest(AuthValidationSchemas.refreshTokenValidationSchema),
   AuthControllers.refreshTokenControllers,
 );
+
+// Forget Password
+route.post(
+  '/forget-password',
+  validateRequest(AuthValidationSchemas.forgetPasswordValidationSchema),
+  AuthControllers.forgetPasswordControllers,
+);
 export const AuthRoutes = route;

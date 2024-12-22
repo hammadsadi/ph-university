@@ -144,8 +144,45 @@ const refreshToken = async (token: string) => {
   );
   return { accessToken };
 };
+
+/**
+ *@Description Forget Password
+ @Method POST
+ */
+const forgetPassword = async (userId:string) =>{
+  // Check User
+  const user = await User.isUserExistCustomId(userId);
+  if (!user) {
+    throw new AppError(400, 'User Not Found!');
+  }
+
+  // Check User Is Deleted Or Not
+  if (user?.isDeleted) {
+    throw new AppError(400, 'User Not Found Bacuase User is Deleted!');
+  }
+  // Check User Status Block Or Not
+  if (user?.status === 'block') {
+    throw new AppError(400, 'User Blocked!');
+  }
+
+    // Generate Access Token
+  const jwtPayload = {
+    userId: user?.id,
+    role: user?.role,
+  };
+  // Generate Access Token
+  const accessToken = createToken(
+    jwtPayload,
+    config.jwt_access_token as string,
+    '10m',
+  );
+
+  const resetLink = `http://localhost:3000?id=${user?.id}&token=${accessToken}`;
+  console.log(resetLink)
+}
 export const AuthServices = {
   userLogin,
   userPasswordChang,
   refreshToken,
+  forgetPassword,
 };

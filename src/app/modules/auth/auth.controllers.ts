@@ -64,8 +64,26 @@ const refreshTokenControllers = catchAsync(async (req, res, next) => {
 });
 
 
+/**
+ * @Description  Forget Password
+ * @param ''
+ * @returns Response with data
+ * @Method POST
+ */
+
+const forgetPasswordControllers = catchAsync(async (req, res, next) => {
+  const userId = req.body.id;
+  const result = await AuthServices.forgetPassword(userId)
+  sendResponse(res, {
+    success: true,
+    message: 'Reset Link Generated Successful',
+    data: result,
+  });
+});
+
 export const AuthControllers = {
   loginUser,
   changeUserPassword,
   refreshTokenControllers,
+  forgetPasswordControllers,
 };

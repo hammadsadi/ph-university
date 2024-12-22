@@ -24,8 +24,16 @@ const refreshTokenValidationSchema = z.object({
     }),
   }),
 });
+
+// Forget assword Validation Schema
+const forgetPasswordValidationSchema = z.object({
+ body: z.object({
+  id: z.string({required_error:'User Id Is Required...!'})
+ })
+});
 export const AuthValidationSchemas = {
   loginValidationSchema,
   passwordChangeValidationSchema,
   refreshTokenValidationSchema,
+  forgetPasswordValidationSchema,
 };
