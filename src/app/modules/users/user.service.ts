@@ -18,7 +18,10 @@ import { Admin } from '../admin/admin.model';
 const userSaveToDB = async (password: string, payload: TStudent) => {
   // Set User Data
   const userData: Partial<TUser> = {};
+  // Set Student Role
   userData.role = 'student';
+  // Set Student Email
+  userData.email = payload?.email;
   userData.password = password || config.default_password;
 
   // Find  Admission Semester info
@@ -70,8 +73,10 @@ const facultySaveToDB = async (payload: TFaculty) => {
   // User Data
   const userData: Partial<TUser> = {};
 
-  // Set User Role
+  // Set Faculty Role
   userData.role = 'faculty';
+  // Set Faculty Email
+  userData.email = payload?.email;
   // Set User Password
   userData.password = payload?.password || config.default_password;
 
@@ -129,8 +134,10 @@ const adminSaveToDB = async (payload: TFaculty) => {
   // User Data
   const userData: Partial<TUser> = {};
 
-  // Set User Role
+  // Set Admin Role
   userData.role = 'admin';
+  // Set Admin Email
+  userData.email = payload?.email;
   // Set User Password
   userData.password = payload?.password || config.default_password;
 

@@ -171,13 +171,13 @@ const forgetPassword = async (userId:string) =>{
     role: user?.role,
   };
   // Generate Access Token
-  const accessToken = createToken(
+  const resetToken = createToken(
     jwtPayload,
     config.jwt_access_token as string,
     '10m',
   );
 
-  const resetLink = `http://localhost:3000?id=${user?.id}&token=${accessToken}`;
+  const resetLink = `http://localhost:3000?id=${user?.id}&token=${resetToken}`;
   console.log(resetLink)
 }
 export const AuthServices = {
