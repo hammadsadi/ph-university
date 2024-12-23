@@ -178,9 +178,46 @@ const forgetPassword = async (userId:string) =>{
     '10m',
   );
 
-  const resetLink = `http://localhost:3000?id=${user?.id}&token=${resetToken}`;
-  console.log(resetLink)
-  sendEmail();
+  const resetLink = `${config.client_base_url}?id=${user?.id}&token=${resetToken}`;
+  const to = user?.email;
+  const sub = 'Password Reset Request 🗝️';
+  const eText = `Dear ${user?.role},
+
+We have received a request to reset your password for your account. If you did not make this request, please disregard this email.
+
+To reset your password, please click the following link:
+${resetLink}
+
+If you need any assistance or have any questions, feel free to reach out to our support team.
+
+Thank you for being a valued member of the PH Islamic University community.
+
+Best regards,
+The PH Islamic University Team
+devteamsaadi@gmail.com`;
+  const eHtml = `<html>
+    <body>
+      <p>Dear ${user?.role},</p>
+
+      <p>We have received a request to reset your password for your account. If you did not make this request, please disregard this email.</p>
+
+      <p>To reset your password, click the link below:</p>
+      
+      <p><a href="${resetLink}" style="background-color: #4CAF50; color: white; padding: 10px 15px; text-decoration: none; border-radius: 5px; cursor: pointer;">Reset My Password</a></p>
+
+      <p>If you need any assistance or have any questions, please don’t hesitate to contact our support team at devteamsaadi@gmail.com.</p>
+
+      <p>Thank you for being a valued member of the PH University community.</p>
+
+      <p>Best regards,<br>The PH University Team</p>
+
+      <footer>
+        <p style="font-size: 12px; color: gray;">If you did not request a password reset, please ignore this email. For support, contact us at devteamsaadi@gmail.com.</p>
+        <p style="font-size: 10px; color: gray;">+8801760170010</p>
+      </footer>
+    </body>
+  </html>`;
+  sendEmail(to, sub, eText, eHtml);
 }
 export const AuthServices = {
   userLogin,

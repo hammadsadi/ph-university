@@ -13,4 +13,6 @@ export default {
   jwt_refresh_token: process.env.REFRESH_TOKEN,
   access_token_experies_in: process.env.ACCESS_TOKEN_EXPIRES_IN,
   refresh_token_experies_in: process.env.REFRESH_TOKEN_EXPIRES_IN,
+  sm_pass: process.env.SM_PASS,
+  client_base_url: process.env.CLIENT_BASE_URL,
 };
