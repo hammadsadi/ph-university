@@ -150,7 +150,7 @@ const refreshToken = async (token: string) => {
  *@Description Forget Password
  @Method POST
  */
-const forgetPassword = async (userId:string) =>{
+const forgetPassword = async (userId: string) => {
   // Check User
   const user = await User.isUserExistCustomId(userId);
   if (!user) {
@@ -166,7 +166,7 @@ const forgetPassword = async (userId:string) =>{
     throw new AppError(400, 'User Blocked!');
   }
 
-    // Generate Access Token
+  // Generate Access Token
   const jwtPayload = {
     userId: user?.id,
     role: user?.role,
@@ -182,7 +182,6 @@ const forgetPassword = async (userId:string) =>{
   const to = user?.email;
   const sub = 'Password Reset Request 🗝️';
   const eText = `Dear ${user?.role},
-
 We have received a request to reset your password for your account. If you did not make this request, please disregard this email.
 
 To reset your password, please click the following link:
@@ -218,10 +217,61 @@ devteamsaadi@gmail.com`;
     </body>
   </html>`;
   sendEmail(to, sub, eText, eHtml);
-}
+};
+
+/**
+ *@Description Reset Password
+ @Method POST
+ */
+const resetPassword = async (
+  payload: { id: string; newPassword: string },
+  token: string,
+) => {
+  // Check User
+  const user = await User.isUserExistCustomId(payload?.id);
+  if (!user) {
+    throw new AppError(400, 'User Not Found!');
+  }
+
+  // Check User Is Deleted Or Not
+  if (user?.isDeleted) {
+    throw new AppError(400, 'User Not Found Bacuase User is Deleted!');
+  }
+  // Check User Status Block Or Not
+  if (user?.status === 'block') {
+    throw new AppError(400, 'User Blocked!');
+  }
+  // Check token
+  const decoded = jwt.verify(
+    token,
+    config.jwt_access_token as string,
+  ) as JwtPayload;
+
+  // Check User Id
+  if (decoded?.userId !== payload.id) {
+    throw new AppError(403, 'You are forbidden!');
+  }
+
+  // Has New Password
+  const newHashPassword = await bcrypt.hash(
+    payload.newPassword,
+    Number(config.bcrypt_solr_round),
+  );
+  await User.findOneAndUpdate(
+    { id: decoded.userId, role: decoded?.role },
+    {
+      password: newHashPassword,
+      needsPasswordChange: false,
+      passwordChangedAt: new Date(),
+    },
+    { new: true },
+  );
+};
+
 export const AuthServices = {
   userLogin,
   userPasswordChang,
   refreshToken,
   forgetPassword,
+  resetPassword,
 };
