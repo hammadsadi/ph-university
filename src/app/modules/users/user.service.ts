@@ -184,10 +184,7 @@ const adminSaveToDB = async (payload: TFaculty) => {
  * @returns Data
  * @method GET
  */
-const getMeFromDb = async (token: string) => {
-  const decode = tokenVerify(token, config.jwt_access_token as string);
-  const { userId, role } = decode;
-
+const getMeFromDb = async (userId: string, role: string) => {
   let result = null;
   // Check Role and Set Data
   if (role === 'student') {
@@ -204,7 +201,6 @@ const getMeFromDb = async (token: string) => {
   if (role === 'faculty') {
     result = await Faculty.findOne({ id: userId }).populate('user');
   }
-  console.log(role);
   return result;
 };
 export const userServices = {

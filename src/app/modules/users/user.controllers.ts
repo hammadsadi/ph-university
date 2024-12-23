@@ -55,12 +55,8 @@ const adminCreate = catchAsync(async (req, res, next) => {
  * @method GET
  */
 const getMe = catchAsync(async (req, res, next) => {
-  const token = req.headers.authorization;
-  // Check Token
-  if (!token) {
-    throw new AppError(400, 'Invalid Request');
-  }
-  const result = await userServices.getMeFromDb(token);
+  const { userId, role } = req.user;
+  const result = await userServices.getMeFromDb(userId, role);
   sendResponse(res, {
     success: true,
     message: 'Loggedin User Data Fatch Successful',
