@@ -203,9 +203,22 @@ const getMeFromDb = async (userId: string, role: string) => {
   }
   return result;
 };
+
+/**
+ *
+ * @Desc Update User Status From from Database
+ * @returns Data
+ * @method POST
+ */
+const userStatusUpdate = async (id:string, payload:{status: string}) =>{
+const result = await User.findByIdAndUpdate(id, payload, {new:true})
+
+return result
+}
 export const userServices = {
   userSaveToDB,
   facultySaveToDB,
   adminSaveToDB,
   getMeFromDb,
+  userStatusUpdate,
 };

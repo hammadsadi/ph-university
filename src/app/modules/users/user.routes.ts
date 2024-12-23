@@ -6,6 +6,7 @@ import { FacultyValidationSchemas } from '../faculty/faculty.validation';
 import { AdminValidationSchemas } from '../admin/admin.validation';
 import authChecking from '../../middlewares/authChecking';
 import { USER_ROLE } from './user.constant';
+import { UserValidationSchemas } from './user.validation';
 
 // Init Routes
 const router = Router();
@@ -30,6 +31,14 @@ router.post(
   authChecking(USER_ROLE.admin),
   validateRequest(AdminValidationSchemas.createValidationAdminSchema),
   userControllers.adminCreate,
+);
+
+// Update User Status
+router.patch(
+  '/change-status/:id',
+  authChecking(USER_ROLE.admin),
+  validateRequest(UserValidationSchemas.userStatusChangeValidationSchema),
+  userControllers.updateStatus,
 );
 
 // Create Faculty Route

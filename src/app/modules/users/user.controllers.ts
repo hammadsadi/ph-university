@@ -64,9 +64,26 @@ const getMe = catchAsync(async (req, res, next) => {
   });
 });
 
+/**
+ *
+ * @Desc Update User Status
+ * @returns Response with Data
+ * @method POST
+ */
+const updateStatus = catchAsync(async (req, res, next) => {
+  const id = req.params.id;
+  const result = await userServices.userStatusUpdate(id, req.body);
+  sendResponse(res, {
+    success: true,
+    message: 'Status Updated Successful Successful',
+    data: result,
+  });
+});
+
 export const userControllers = {
   userCreate,
   facultyCreate,
   adminCreate,
   getMe,
+  updateStatus,
 };
