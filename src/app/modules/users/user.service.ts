@@ -13,6 +13,7 @@ import { Faculty } from '../faculty/faculty.model';
 import { TFaculty } from '../faculty/faculty.interface';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
 import { Admin } from '../admin/admin.model';
+import { tokenVerify } from '../auth/auth.utils';
 
 // User Save to DB
 const userSaveToDB = async (password: string, payload: TStudent) => {
@@ -177,8 +178,38 @@ const adminSaveToDB = async (payload: TFaculty) => {
   }
 };
 
+/**
+ *
+ * @Desc Get Me from Database
+ * @returns Data
+ * @method GET
+ */
+const getMeFromDb = async (token: string) => {
+  const decode = tokenVerify(token, config.jwt_access_token as string);
+  const { userId, role } = decode;
+
+  let result = null;
+  // Check Role and Set Data
+  if (role === 'student') {
+    result = await Student.findOne({ id: userId })
+      .populate('user')
+      .populate('admissionSemester')
+      .populate('academicDepartment');
+  }
+  // Check Role and Set Data
+  if (role === 'admin') {
+    result = await Admin.findOne({ id: userId }).populate('user');
+  }
+  // Check Role and Set Data
+  if (role === 'faculty') {
+    result = await Faculty.findOne({ id: userId }).populate('user');
+  }
+  console.log(role);
+  return result;
+};
 export const userServices = {
   userSaveToDB,
   facultySaveToDB,
   adminSaveToDB,
+  getMeFromDb,
 };

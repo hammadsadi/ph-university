@@ -24,12 +24,19 @@ router.post(
   validateRequest(FacultyValidationSchemas.createFacultyValidationSchema),
   userControllers.facultyCreate,
 );
-// Create Faculty Route
+// Create Admin Route
 router.post(
   '/create-admin',
-  // authChecking(USER_ROLE.admin),
+  authChecking(USER_ROLE.admin),
   validateRequest(AdminValidationSchemas.createValidationAdminSchema),
   userControllers.adminCreate,
+);
+
+// Create Faculty Route
+router.get(
+  '/me',
+  authChecking(USER_ROLE.admin, USER_ROLE.student, USER_ROLE.faculty),
+  userControllers.getMe,
 );
 
 export const userRoutes = router;
