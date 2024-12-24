@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable no-unused-vars */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import config from '../../config';
@@ -17,7 +18,7 @@ import { tokenVerify } from '../auth/auth.utils';
 import { uploadImageToCloudinary } from '../../utils/uploadImageToCloudinary';
 
 // User Save to DB
-const userSaveToDB = async (password: string, payload: TStudent) => {
+const userSaveToDB = async (password: string, payload: TStudent, file: any) => {
   // Set User Data
   const userData: Partial<TUser> = {};
   // Set Student Role
@@ -47,8 +48,12 @@ const userSaveToDB = async (password: string, payload: TStudent) => {
     payload.id = createdUser[0].id;
     payload.user = createdUser[0]._id;
 
+    const filePath = file?.path;
+    const imgName = `${userData?.id}-${payload?.name.firstName}`;
     // Cloudinary Image Upload
-    uploadImageToCloudinary();
+    const profileImage = await uploadImageToCloudinary(imgName, filePath);
+    // Set Image Url
+    payload.profileImage = profileImage?.secure_url as string;
 
     // Create Student
     const result = await Student.create([payload], { session }); //  Return Array
@@ -215,11 +220,11 @@ const getMeFromDb = async (userId: string, role: string) => {
  * @returns Data
  * @method POST
  */
-const userStatusUpdate = async (id:string, payload:{status: string}) =>{
-const result = await User.findByIdAndUpdate(id, payload, {new:true})
+const userStatusUpdate = async (id: string, payload: { status: string }) => {
+  const result = await User.findByIdAndUpdate(id, payload, { new: true });
 
-return result
-}
+  return result;
+};
 export const userServices = {
   userSaveToDB,
   facultySaveToDB,

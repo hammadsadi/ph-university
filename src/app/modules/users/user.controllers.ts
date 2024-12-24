@@ -10,7 +10,8 @@ import AppError from '../../errors/AppError';
  */
 const userCreate = catchAsync(async (req, res, next) => {
   const { password, student } = req.body;
-  const result = await userServices.userSaveToDB(password, student);
+
+  const result = await userServices.userSaveToDB(password, student, req.file);
   sendResponse(res, {
     success: true,
     message: 'User Created Successful',

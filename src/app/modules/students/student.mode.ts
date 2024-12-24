@@ -161,6 +161,10 @@ const studentSchema = new Schema<TStudent>(
       type: localGuardianSchema,
       required: true,
     },
+    profileImage: {
+      type: String,
+      default: null,
+    },
     isDeleted: {
       type: Boolean,
       default: false,
