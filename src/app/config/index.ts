@@ -15,4 +15,7 @@ export default {
   refresh_token_experies_in: process.env.REFRESH_TOKEN_EXPIRES_IN,
   sm_pass: process.env.SM_PASS,
   client_base_url: process.env.CLIENT_BASE_URL,
+  cloudinary_cloude_name: process.env.CLOUDINARY_CLOUDE_NAME,
+  cloudinary_api_key: process.env.CLOUDINARY_API_KEY,
+  cloudinary_api_secret: process.env.CLOUDINARY_API_SECRET,
 };

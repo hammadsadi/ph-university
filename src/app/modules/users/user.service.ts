@@ -14,6 +14,7 @@ import { TFaculty } from '../faculty/faculty.interface';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
 import { Admin } from '../admin/admin.model';
 import { tokenVerify } from '../auth/auth.utils';
+import { uploadImageToCloudinary } from '../../utils/uploadImageToCloudinary';
 
 // User Save to DB
 const userSaveToDB = async (password: string, payload: TStudent) => {
@@ -45,6 +46,10 @@ const userSaveToDB = async (password: string, payload: TStudent) => {
     }
     payload.id = createdUser[0].id;
     payload.user = createdUser[0]._id;
+
+    // Cloudinary Image Upload
+    uploadImageToCloudinary();
+
     // Create Student
     const result = await Student.create([payload], { session }); //  Return Array
     // Validation
