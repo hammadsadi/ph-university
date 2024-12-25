@@ -34,7 +34,7 @@ export type TFaculty = {
   password: string;
   user: Types.ObjectId;
   designation: string;
-  name: TFaculty;
+  name: TFacultytName;
   gender: TGender;
   dateOfBirth: Date;
   email: string;

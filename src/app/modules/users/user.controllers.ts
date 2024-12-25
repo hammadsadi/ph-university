@@ -26,7 +26,7 @@ const userCreate = catchAsync(async (req, res, next) => {
  * @method POST
  */
 const facultyCreate = catchAsync(async (req, res, next) => {
-  const result = await userServices.facultySaveToDB(req.body);
+  const result = await userServices.facultySaveToDB(req.body, req.file);
   sendResponse(res, {
     success: true,
     message: 'Faculty Created Successful',
