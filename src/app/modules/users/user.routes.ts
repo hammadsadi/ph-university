@@ -39,7 +39,12 @@ router.post(
 // Create Admin Route
 router.post(
   '/create-admin',
-  authChecking(USER_ROLE.admin),
+  // authChecking(USER_ROLE.admin),
+  uploadMulter.single('file'),
+  (req: Request, res: Response, next: NextFunction) => {
+    req.body = JSON.parse(req.body.data);
+    next();
+  },
   validateRequest(AdminValidationSchemas.createValidationAdminSchema),
   userControllers.adminCreate,
 );

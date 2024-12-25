@@ -41,7 +41,7 @@ const facultyCreate = catchAsync(async (req, res, next) => {
  * @method POST
  */
 const adminCreate = catchAsync(async (req, res, next) => {
-  const result = await userServices.adminSaveToDB(req.body);
+  const result = await userServices.adminSaveToDB(req.body, req.file);
   sendResponse(res, {
     success: true,
     message: 'Admin Created Successful',

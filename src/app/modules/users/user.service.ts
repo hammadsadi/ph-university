@@ -147,7 +147,7 @@ const facultySaveToDB = async (payload: TFaculty, file: any) => {
  * @returns Data
  * @method POST
  */
-const adminSaveToDB = async (payload: TFaculty) => {
+const adminSaveToDB = async (payload: TFaculty, file: any) => {
   // User Data
   const userData: Partial<TUser> = {};
 
@@ -165,6 +165,13 @@ const adminSaveToDB = async (payload: TFaculty) => {
     session.startTransaction();
     // Generate Faculty Id
     userData.id = await generateAdminId();
+
+    const filePath = file?.path;
+    const imgName = `${userData?.id}-${payload?.name.firstName}`;
+    // Cloudinary Image Upload
+    const profileImage = await uploadImageToCloudinary(imgName, filePath);
+    // Set Image Url
+    payload.profileImage = profileImage?.secure_url as string;
 
     // Create User
     const newsUser = await User.create([userData], { session }); // Return Array
