@@ -10,9 +10,9 @@ export interface ICourseMarks {
 
 export interface IEnrolledCourse {
   semesterRegistration: Types.ObjectId;
-  academicSemester: Types.ObjectId;
+  admissionSemester: Types.ObjectId;
   academicFaculty: Types.ObjectId;
-  academicDepartmen: Types.ObjectId;
+  academicDepartment: Types.ObjectId;
   offeredCourse: Types.ObjectId;
   course: Types.ObjectId;
   student: Types.ObjectId;
