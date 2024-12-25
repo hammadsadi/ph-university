@@ -13,7 +13,11 @@ import { EnrolledCourseServices } from './enrolledCourses.services';
  */
 
 const createEnrolledCourse = catchAsync(async (req, res, next) => {
-  const result = await EnrolledCourseServices.saveEnrolledCourseToDB();
+    const userId = req.user.userId;
+    const result = await EnrolledCourseServices.saveEnrolledCourseToDB(
+      userId,
+      req.body,
+    );
   sendResponse(res, {
     success: true,
     message: 'Offer Course Deleted Successful',
