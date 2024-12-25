@@ -88,7 +88,6 @@ const createFacultyValidationSchema = z.object({
     presentAddress: createPresendAddressValidation,
     permanentAddress: createPresendAddressValidation,
     academicDepartment: z.string(),
-    profileImg: z.string().optional(),
   }),
 });
 
