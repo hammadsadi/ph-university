@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import mongoose from 'mongoose';
 import AppError from '../../errors/AppError';
 import { OfferCourse } from '../offerCourse/offerCourse.model';
 import { Student } from '../students/student.mode';
@@ -35,8 +37,42 @@ const saveEnrolledCourseToDB = async (
     offeredCourse,
     student: student?._id,
   });
-  if (!isStudentAlreadyEnrolled) {
-    throw new AppError(404, 'Student is Already Enrolled!');
+  if (isStudentAlreadyEnrolled) {
+    throw new AppError(400, 'Student is Already Enrolled!');
+  }
+
+  // Transaction and Roleback
+  const session = await mongoose.startSession();
+
+  try {
+    session.startTransaction();
+    const result = await EnrolledCourse.create(
+      [
+        {
+          semesterRegistration: isOfferedCourseExist?.semesterRegistration,
+          admissionSemester: isOfferedCourseExist?.admissionSemester,
+          academicFaculty: isOfferedCourseExist?.academicFecaulty,
+          academicDepartment: isOfferedCourseExist?.academicDepartment,
+          offeredCourse: offeredCourse,
+          course: isOfferedCourseExist?.course,
+          student: student?._id,
+          faculty: isOfferedCourseExist?.faculty,
+          isEnrolled: true,
+        },
+      ],
+      { session },
+    );
+    const prevMaxCapacity = isOfferedCourseExist.maxCapacity;
+    await OfferCourse.findByIdAndUpdate(offeredCourse, {
+      maxCapacity: prevMaxCapacity - 1,
+    });
+    await session.commitTransaction();
+    await session.endSession();
+    return result;
+  } catch (error: any) {
+    await session.abortTransaction();
+    await session.endSession();
+    throw new Error(error);
   }
 };
 

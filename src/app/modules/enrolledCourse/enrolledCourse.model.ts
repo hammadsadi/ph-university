@@ -70,6 +70,7 @@ const enrolledCourseSchema = new Schema<IEnrolledCourse>(
     },
     courseMarks: {
       type: courseMarksSchema,
+      default: {},
     },
     grade: {
       type: String,
