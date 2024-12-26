@@ -14,10 +14,10 @@ const updateCourseMarksValidation = z.object({
     offeredCourse: z.string(),
     student: z.string(),
     courseMarks: z.object({
-      classTest1: z.string(),
-      midTerm: z.string(),
-      classTest2: z.string(),
-      finalTerm: z.string(),
+      classTest1: z.number(),
+      midTerm: z.number(),
+      classTest2: z.number(),
+      finalTerm: z.number(),
     }),
   }),
 });

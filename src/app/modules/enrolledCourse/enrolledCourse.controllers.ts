@@ -34,10 +34,11 @@ const createEnrolledCourse = catchAsync(async (req, res, next) => {
  */
 
 const updateEnrolledCourseMarks = catchAsync(async (req, res, next) => {
-console.log(req.user)
-  const result = await EnrolledCourseServices.updateEnrolledCourseMarksFromDB(
-    req.body,
-  );
+const facultyId = req.user?.userId;
+const result = await EnrolledCourseServices.updateEnrolledCourseMarksFromDB(
+  facultyId,
+  req.body,
+);
   sendResponse(res, {
     success: true,
     message: 'Course Enrolled Marks Updated Successful!',

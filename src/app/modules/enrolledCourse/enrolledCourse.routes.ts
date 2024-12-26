@@ -18,12 +18,10 @@ route.post(
 );
 
 // Update Enroll Course Marks
-route.post(
+route.patch(
   '/update-enrolled-course-marks',
   authChecking('faculty'),
-  validateRequest(
-    EnrolledCourseValidationSchemas.updateCourseMarksValidation,
-  ),
+  validateRequest(EnrolledCourseValidationSchemas.updateCourseMarksValidation),
   EnrolledCourseControllers.updateEnrolledCourseMarks,
 );
 

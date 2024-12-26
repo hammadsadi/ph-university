@@ -136,9 +136,29 @@ const saveEnrolledCourseToDB = async (
  * @returns Response with data
  * @Method PATCH
  */
-const updateEnrolledCourseMarksFromDB = async(payload: Partial<IEnrolledCourse>)=>{
-  console.log(payload)
-}
+const updateEnrolledCourseMarksFromDB = async (
+  facultyId: string,
+  payload: Partial<IEnrolledCourse>,
+) => {
+  const { semesterRegistration, offeredCourse, student } = payload;
+  // Check Offer Course
+  const isOfferedCourseExist = await OfferCourse.findById(offeredCourse);
+  if (!isOfferedCourseExist) {
+    throw new AppError(404, 'Offer Course Not Found');
+  }
+
+  // Check Semester Registration
+  const isSemesterRegistrationExist =
+    await SemesterRegistration.findById(semesterRegistration);
+  if (!isSemesterRegistrationExist) {
+    throw new AppError(404, 'Semester Registration Not Found!');
+  }
+  // Check Student
+  const isStudentExist = await Student.findById(student);
+  if (!isStudentExist) {
+    throw new AppError(404, 'Student Not Found!');
+  }
+};
 
 
 export const EnrolledCourseServices = {
