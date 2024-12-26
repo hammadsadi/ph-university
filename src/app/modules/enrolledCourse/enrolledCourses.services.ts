@@ -7,6 +7,7 @@ import { IEnrolledCourse } from './enrolledCourse.interface';
 import EnrolledCourse from './enrolledCourse.model';
 import { SemesterRegistration } from '../semesterRegistration/semester.registration.model';
 import { Course } from '../courses/course.model';
+import { Faculty } from '../faculty/faculty.model';
 
 /**
  * @Description  Save Enrolled Course
@@ -129,7 +130,6 @@ const saveEnrolledCourseToDB = async (
   }
 };
 
-
 /**
  * @Description  Update Enrolled Course Marks
  * @param '
@@ -140,7 +140,7 @@ const updateEnrolledCourseMarksFromDB = async (
   facultyId: string,
   payload: Partial<IEnrolledCourse>,
 ) => {
-  const { semesterRegistration, offeredCourse, student } = payload;
+  const { semesterRegistration, offeredCourse, student, courseMarks } = payload;
   // Check Offer Course
   const isOfferedCourseExist = await OfferCourse.findById(offeredCourse);
   if (!isOfferedCourseExist) {
@@ -158,6 +158,18 @@ const updateEnrolledCourseMarksFromDB = async (
   if (!isStudentExist) {
     throw new AppError(404, 'Student Not Found!');
   }
+
+  // Get Faculty
+  const faculty = await Faculty.findOne({ id: facultyId }, { _id: 1 });
+  if (!faculty) {
+    throw new AppError(404, 'Faculty Not Found!');
+  }
+  // Check Course Belong to Faculty
+  const isCourseBelongToFaculty = await EnrolledCourse.findOne({
+    semesterRegistration,
+    offeredCourse,
+    faculty: faculty?._id,
+  });
 };
 
 
