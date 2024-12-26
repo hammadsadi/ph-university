@@ -175,6 +175,19 @@ const updateEnrolledCourseMarksFromDB = async (
     throw new AppError(403, 'You are Forbidden!');
   }
 
+  // Calculate Grade
+  if (courseMarks?.finalTerm) {
+    const { classTest1, classTest2, midTerm, finalTerm } =
+      isCourseBelongToFaculty.courseMarks;
+    const totalMarks =
+      Math.ceil(classTest1 * 0.1) +
+      Math.ceil(midTerm * 0.3) +
+      Math.ceil(classTest2 * 0.1) +
+      Math.ceil(finalTerm * 0.5);
+
+    console.log(totalMarks);
+  }
+
   // Dinamically Update
   const modifiedData: Record<string, unknown> = { ...courseMarks };
   if (courseMarks && Object.keys(courseMarks).length) {
