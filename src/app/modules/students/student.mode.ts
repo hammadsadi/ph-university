@@ -201,4 +201,9 @@ studentSchema.pre('save', async function (next) {
   next();
 });
 
+// Query Middleware
+studentSchema.pre('find', function(next){
+  this.find({ isDeleted: {$ne:true} });
+  next()
+})
 export const Student = model('Student', studentSchema);

@@ -59,6 +59,11 @@ class QueryBuilder<T> {
     this.modelQuery = this.modelQuery.select(fields);
     return this;
   }
+  // Meta Data Count
+  countTotal() {
+    const filter = this.modelQuery.getFilter();
+    console.log(filter);
+  }
 }
 
 export default QueryBuilder;
