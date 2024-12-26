@@ -170,6 +170,10 @@ const updateEnrolledCourseMarksFromDB = async (
     offeredCourse,
     faculty: faculty?._id,
   });
+
+   if (!isCourseBelongToFaculty) {
+     throw new AppError(403, 'You are Forbidden!');
+   }
 };
 
 
