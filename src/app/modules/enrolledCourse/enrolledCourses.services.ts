@@ -129,6 +129,19 @@ const saveEnrolledCourseToDB = async (
   }
 };
 
+
+/**
+ * @Description  Update Enrolled Course Marks
+ * @param '
+ * @returns Response with data
+ * @Method PATCH
+ */
+const updateEnrolledCourseMarksFromDB = async(payload: Partial<IEnrolledCourse>)=>{
+  console.log(payload)
+}
+
+
 export const EnrolledCourseServices = {
   saveEnrolledCourseToDB,
+  updateEnrolledCourseMarksFromDB,
 };

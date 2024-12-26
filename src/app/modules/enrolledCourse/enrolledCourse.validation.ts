@@ -10,6 +10,9 @@ const createEnrolledCourseValidation = z.object({
 // Update Course Marks Validation
 const updateCourseMarksValidation = z.object({
   body: z.object({
+    semesterRegistration: z.string(),
+    offeredCourse: z.string(),
+    student: z.string(),
     courseMarks: z.object({
       classTest1: z.string(),
       midTerm: z.string(),

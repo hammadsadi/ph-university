@@ -17,4 +17,14 @@ route.post(
   EnrolledCourseControllers.createEnrolledCourse,
 );
 
+// Update Enroll Course Marks
+route.post(
+  '/update-enrolled-course-marks',
+  authChecking('faculty'),
+  validateRequest(
+    EnrolledCourseValidationSchemas.updateCourseMarksValidation,
+  ),
+  EnrolledCourseControllers.updateEnrolledCourseMarks,
+);
+
 export const EnrolledCourseRoutes = route;
