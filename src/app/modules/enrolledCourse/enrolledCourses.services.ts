@@ -171,9 +171,24 @@ const updateEnrolledCourseMarksFromDB = async (
     faculty: faculty?._id,
   });
 
-   if (!isCourseBelongToFaculty) {
-     throw new AppError(403, 'You are Forbidden!');
-   }
+  if (!isCourseBelongToFaculty) {
+    throw new AppError(403, 'You are Forbidden!');
+  }
+
+  // Dinamically Update
+  const modifiedData: Record<string, unknown> = { ...courseMarks };
+  if (courseMarks && Object.keys(courseMarks).length) {
+    for (const [key, value] of Object.entries(courseMarks)) {
+      modifiedData[`courseMarks.${key}`] = value;
+    }
+  }
+  const result = await EnrolledCourse.findByIdAndUpdate(
+    isCourseBelongToFaculty?._id,
+    modifiedData,
+    { new: true },
+  );
+
+  return result;
 };
 
 
