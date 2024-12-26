@@ -21,13 +21,13 @@ export const uploadImageToCloudinary = async (
       console.log(error);
     });
 
-    fs.unlink(path, (er) => {
-      if (er) {
-        console.log(er);
-      } else {
-        console.log('File Is Deleted!');
-      }
-    });
+  fs.unlink(path, (er) => {
+    if (er) {
+      console.log(er);
+    } else {
+      console.log('File Is Deleted!');
+    }
+  });
 
   return uploadResult;
 };

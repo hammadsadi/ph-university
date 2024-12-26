@@ -1,5 +1,5 @@
-import express, { Application, Request, Response } from "express";
-import cors from 'cors'
+import express, { Application, Request, Response } from 'express';
+import cors from 'cors';
 import router from './app/routes/intex';
 import notFound from './app/middlewares/notFound';
 import globalErrorHandler from './app/middlewares/globalErrorHandler';
@@ -22,4 +22,4 @@ app.use('/api/v1', router);
 app.use(globalErrorHandler);
 app.use(notFound);
 
-export default app
+export default app;

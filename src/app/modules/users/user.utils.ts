@@ -34,7 +34,6 @@ export const generatedId = async (payload: TAdmissionSemester | null) => {
   return increamentId;
 };
 
-
 // Get Last Faculty ID
 export const findLastFacultyId = async () => {
   const lastFaculty = await User.findOne(
@@ -55,21 +54,18 @@ export const findLastFacultyId = async () => {
 };
 
 // Generate Faculty ID
-export const generateFacultyId = async() =>{
-  let currentId =(0).toString()
+export const generateFacultyId = async () => {
+  let currentId = (0).toString();
 
   // Last Faculty Id
-  const lastFacultyId = await findLastFacultyId()
-  if(lastFacultyId){
-    currentId = lastFacultyId.substring(2)
+  const lastFacultyId = await findLastFacultyId();
+  if (lastFacultyId) {
+    currentId = lastFacultyId.substring(2);
   }
-  let increamentId = (Number(currentId)+1).toString().padStart(4, '0')
-increamentId = `F-${increamentId}`
-return increamentId
-
-}
-
-
+  let increamentId = (Number(currentId) + 1).toString().padStart(4, '0');
+  increamentId = `F-${increamentId}`;
+  return increamentId;
+};
 
 // Get Last Admin ID
 export const findLastAdminId = async () => {
@@ -91,16 +87,15 @@ export const findLastAdminId = async () => {
 };
 
 // Generate Admin ID
-export const generateAdminId = async() =>{
-  let currentId =(0).toString()
+export const generateAdminId = async () => {
+  let currentId = (0).toString();
 
   // Last Admin Id
-  const lastAdminId = await findLastAdminId()
-  if(lastAdminId){
-    currentId = lastAdminId.substring(2)
+  const lastAdminId = await findLastAdminId();
+  if (lastAdminId) {
+    currentId = lastAdminId.substring(2);
   }
-  let increamentId = (Number(currentId)+1).toString().padStart(4, '0')
-increamentId = `A-${increamentId}`
-return increamentId
-
-}
+  let increamentId = (Number(currentId) + 1).toString().padStart(4, '0');
+  increamentId = `A-${increamentId}`;
+  return increamentId;
+};

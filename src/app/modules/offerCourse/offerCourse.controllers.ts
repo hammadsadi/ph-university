@@ -28,8 +28,7 @@ const createOfferCourse = catchAsync(async (req, res, next) => {
  */
 
 const getOfferCourse = catchAsync(async (req, res, next) => {
-  const result = await OfferCourseServices.getAllOfferCourseFromDB(
-  );
+  const result = await OfferCourseServices.getAllOfferCourseFromDB();
   sendResponse(res, {
     success: true,
     message: 'Offer Course Get Successful',
@@ -45,7 +44,9 @@ const getOfferCourse = catchAsync(async (req, res, next) => {
  */
 
 const getSingleOfferCourse = catchAsync(async (req, res, next) => {
-  const result = await OfferCourseServices.getSingleOfferCourseFromDB(req.params.id);
+  const result = await OfferCourseServices.getSingleOfferCourseFromDB(
+    req.params.id,
+  );
   sendResponse(res, {
     success: true,
     message: 'Single Offer Course Get Successful',
@@ -71,8 +72,6 @@ const updatedOfferCourse = catchAsync(async (req, res, next) => {
     data: result,
   });
 });
-
-
 
 /**
  * @Description  Delete Offer Course

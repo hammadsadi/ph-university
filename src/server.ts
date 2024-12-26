@@ -30,8 +30,7 @@ process.on('unhandledRejection', () => {
 });
 
 // Uncaught Rejection For Synchronous Code
-process.on('uncaughtException', ()=>{
+process.on('uncaughtException', () => {
   console.log(`😈 Uncaught Rejection Detected! Shutting Down...`);
-  process.exit(1)
-})
-
+  process.exit(1);
+});

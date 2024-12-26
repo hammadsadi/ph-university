@@ -189,7 +189,6 @@ studentSchema.pre('findOneAndUpdate', async function (next) {
   next();
 });
 
-
 // When Create Student Check Exist or not Before Save Using Pre hooks
 studentSchema.pre('save', async function (next) {
   // Is Exist or not

@@ -45,7 +45,6 @@ const changeUserPassword = catchAsync(async (req, res, next) => {
   });
 });
 
-
 /**
  * @Description  Refresh Token
  * @param ''
@@ -63,7 +62,6 @@ const refreshTokenControllers = catchAsync(async (req, res, next) => {
   });
 });
 
-
 /**
  * @Description  Forget Password
  * @param ''
@@ -73,14 +71,13 @@ const refreshTokenControllers = catchAsync(async (req, res, next) => {
 
 const forgetPasswordControllers = catchAsync(async (req, res, next) => {
   const userId = req.body.id;
-  const result = await AuthServices.forgetPassword(userId)
+  const result = await AuthServices.forgetPassword(userId);
   sendResponse(res, {
     success: true,
     message: 'Reset Link Generated Successful',
     data: result,
   });
 });
-
 
 /**
  * @Description  Reset Password
@@ -90,8 +87,8 @@ const forgetPasswordControllers = catchAsync(async (req, res, next) => {
  */
 
 const resetPasswordControllers = catchAsync(async (req, res, next) => {
-  const token = req.headers.authorization
-  const result = await AuthServices.resetPassword(req.body, token as string)
+  const token = req.headers.authorization;
+  const result = await AuthServices.resetPassword(req.body, token as string);
   sendResponse(res, {
     success: true,
     message: 'Reset Password Successful',
