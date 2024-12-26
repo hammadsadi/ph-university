@@ -1,4 +1,4 @@
-const calculateGradeAndPoints = (totgalMarks) => {
+export const calculateGradeAndPoints = (totgalMarks: number) => {
   let result = {
     grade: 'NA',
     gradePoints: 0,

@@ -8,6 +8,7 @@ import EnrolledCourse from './enrolledCourse.model';
 import { SemesterRegistration } from '../semesterRegistration/semester.registration.model';
 import { Course } from '../courses/course.model';
 import { Faculty } from '../faculty/faculty.model';
+import { calculateGradeAndPoints } from './enrolledCourse.utils';
 
 /**
  * @Description  Save Enrolled Course
@@ -141,6 +142,7 @@ const updateEnrolledCourseMarksFromDB = async (
   payload: Partial<IEnrolledCourse>,
 ) => {
   const { semesterRegistration, offeredCourse, student, courseMarks } = payload;
+  const modifiedData: Record<string, unknown> = { ...courseMarks };
   // Check Offer Course
   const isOfferedCourseExist = await OfferCourse.findById(offeredCourse);
   if (!isOfferedCourseExist) {
@@ -185,11 +187,14 @@ const updateEnrolledCourseMarksFromDB = async (
       Math.ceil(classTest2 * 0.1) +
       Math.ceil(finalTerm * 0.5);
 
-    console.log(totalMarks);
+    const result = calculateGradeAndPoints(totalMarks);
+    modifiedData.grade = result.grade;
+    modifiedData.gradePoints = result.gradePoints;
+    modifiedData.isCompleted = true;
   }
 
   // Dinamically Update
-  const modifiedData: Record<string, unknown> = { ...courseMarks };
+
   if (courseMarks && Object.keys(courseMarks).length) {
     for (const [key, value] of Object.entries(courseMarks)) {
       modifiedData[`courseMarks.${key}`] = value;
