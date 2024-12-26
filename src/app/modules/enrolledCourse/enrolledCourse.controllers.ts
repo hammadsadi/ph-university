@@ -20,7 +20,7 @@ const createEnrolledCourse = catchAsync(async (req, res, next) => {
     );
   sendResponse(res, {
     success: true,
-    message: 'Offer Course Deleted Successful',
+    message: 'Course Enrolled Successful',
     data: result,
   });
 });

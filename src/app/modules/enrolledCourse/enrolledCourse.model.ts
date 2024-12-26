@@ -1,9 +1,12 @@
 import mongoose, { Schema } from 'mongoose';
-import { ICourseMarks, IEnrolledCourse } from './enrolledCourse.interface';
+import {
+  IEnrolledCourse,
+  IEnrolledCourseMarks,
+} from './enrolledCourse.interface';
 import { Grade } from './enrolledCourse.constant';
 
 // Marks Sub Schema
-const courseMarksSchema = new Schema<ICourseMarks>({
+const courseMarksSchema = new Schema<IEnrolledCourseMarks>({
   classTest1: {
     type: Number,
     default: 0,

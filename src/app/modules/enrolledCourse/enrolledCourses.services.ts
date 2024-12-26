@@ -42,6 +42,7 @@ const saveEnrolledCourseToDB = async (
   if (isStudentAlreadyEnrolled) {
     throw new AppError(400, 'Student is Already Enrolled!');
   }
+  // Get Course Info
   const course = await Course.findById(isOfferedCourseExist.course);
 
   // Get Total Credits
@@ -86,7 +87,6 @@ const saveEnrolledCourseToDB = async (
   // Check Total Credits Exceeds MaxCredit
   const totalCredits =
     enrolledCourses?.length > 0 ? enrolledCourses[0].totalEnrolledCredits : 0;
-  console.log(totalCredits);
   if (
     totalCredits &&
     semesterRegistration?.maxCradit &&
