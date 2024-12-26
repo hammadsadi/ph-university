@@ -46,7 +46,24 @@ const result = await EnrolledCourseServices.updateEnrolledCourseMarksFromDB(
   });
 });
 
+/**
+ * @Description  Get All Enrolled Course From DB
+ * @param '
+ * @returns Response with data
+ * @Method GET
+ */
+
+const getAllEnrolledCourse = catchAsync(async (req, res, next) => {
+const result = await EnrolledCourseServices.getAllEnrolledCourseFromDB(req.query)
+  sendResponse(res, {
+    success: true,
+    message: 'All Enrolled Course Get Successful!',
+    data: result,
+  });
+});
+
 export const EnrolledCourseControllers = {
   createEnrolledCourse,
   updateEnrolledCourseMarks,
+  getAllEnrolledCourse,
 };

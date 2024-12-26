@@ -9,6 +9,7 @@ import { SemesterRegistration } from '../semesterRegistration/semester.registrat
 import { Course } from '../courses/course.model';
 import { Faculty } from '../faculty/faculty.model';
 import { calculateGradeAndPoints } from './enrolledCourse.utils';
+import QueryBuilder from '../../builder/QueryBuilder';
 
 /**
  * @Description  Save Enrolled Course
@@ -209,8 +210,35 @@ const updateEnrolledCourseMarksFromDB = async (
   return result;
 };
 
+/**
+ * @Description  Get All Enrolled Course From DB
+ * @param '
+ * @returns Response with data
+ * @Method GET
+ */
+const getAllEnrolledCourseFromDB = async (query: Record<string, unknown>) => {
+  const enrolledcourseQuery = new QueryBuilder(
+    EnrolledCourse.find()
+      .populate('semesterRegistration')
+      .populate('admissionSemester')
+      .populate('academicDepartment')
+      .populate('offeredCourse')
+      .populate('course')
+      .populate('student')
+      .populate('faculty')
+      .populate('academicFaculty'),
+    query,
+  )
+    .filter()
+    .pagination()
+    .sort()
+    .fields();
+  const result = await enrolledcourseQuery.modelQuery;
+  return result;
+};
 
 export const EnrolledCourseServices = {
   saveEnrolledCourseToDB,
   updateEnrolledCourseMarksFromDB,
+  getAllEnrolledCourseFromDB,
 };

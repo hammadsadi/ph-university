@@ -25,4 +25,11 @@ route.patch(
   EnrolledCourseControllers.updateEnrolledCourseMarks,
 );
 
+// Update Enroll Course Marks
+route.get(
+  '/all-enrolled-courses',
+  authChecking('admin'),
+  EnrolledCourseControllers.getAllEnrolledCourse,
+);
+
 export const EnrolledCourseRoutes = route;
