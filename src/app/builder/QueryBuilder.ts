@@ -9,11 +9,25 @@ class QueryBuilder<T> {
   }
 
   // Searching
-  search(searchAbleFields: string[]) {
+  // search(searchAbleFields: string[]) {
+  //   const searchTerm = this?.query?.searchTerm;
+  //   if (searchTerm) {
+  //     this.modelQuery = this.modelQuery.find({
+  //       $or: searchAbleFields.map(
+  //         (field) =>
+  //           ({
+  //             [field]: { $regex: searchTerm, $options: 'i' },
+  //           }) as FilterQuery<T>,
+  //       ),
+  //     });
+  //   }
+  //   return this;
+  // }
+  search(searchableFields: string[]) {
     const searchTerm = this?.query?.searchTerm;
-    if (this?.query?.searchTerm) {
+    if (searchTerm) {
       this.modelQuery = this.modelQuery.find({
-        $or: searchAbleFields.map(
+        $or: searchableFields.map(
           (field) =>
             ({
               [field]: { $regex: searchTerm, $options: 'i' },
@@ -61,8 +75,7 @@ class QueryBuilder<T> {
   }
   // Meta Data Count
   countTotal() {
-    const filter = this.modelQuery.getFilter();
-    console.log(filter);
+    const filterQuery = this.modelQuery.getFilter();
   }
 }
 

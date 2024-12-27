@@ -2,12 +2,15 @@ import mongoose from 'mongoose';
 import app from './app';
 import config from './app/config';
 import { Server } from 'http';
+import seedSuperAdmin from './app/DB';
 let server: Server;
 // Connection Related Function
 async function main() {
-  await mongoose.connect(config.mongoose_url as string);
-
   try {
+    // DB Connection
+    await mongoose.connect(config.mongoose_url as string);
+    // Create Super Admin
+    seedSuperAdmin();
     server = app.listen(config.port, () => {
       console.log(`✅ PH Unuversity API Connected ${config.port}`);
     });
