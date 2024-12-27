@@ -2,6 +2,8 @@ import { Router } from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import { AcademicDepartmentValidationSchemas } from './academicDepartment.validation';
 import { AcademicDepartmentControllers } from './academicDepartment.controllers';
+import authChecking from '../../middlewares/authChecking';
+import { USER_ROLE } from '../users/user.constant';
 
 // Route init
 const route = Router();
@@ -9,9 +11,10 @@ const route = Router();
 // Create Academic Department
 route.post(
   '/create-academic-department',
-  // validateRequest(
-  //   AcademicDepartmentValidationSchemas.createAcademicDepartmentValidation,
-  // ),
+  authChecking(USER_ROLE.admin, USER_ROLE.superAdmin),
+  validateRequest(
+    AcademicDepartmentValidationSchemas.createAcademicDepartmentValidation,
+  ),
   AcademicDepartmentControllers.academicDepartmentCreate,
 );
 // Get All Academic Department

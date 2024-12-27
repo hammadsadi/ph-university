@@ -124,6 +124,11 @@ const studentSchema = new Schema<TStudent>(
       ref: 'AcademicDepartment',
       required: true,
     },
+    academicFaculty: {
+      type: Schema.Types.ObjectId,
+      ref: 'AcademicFaculty',
+      required: true,
+    },
     dateOfBirth: {
       type: Date,
       required: true,

@@ -31,6 +31,21 @@ const userSaveToDB = async (password: string, payload: TStudent, file: any) => {
   const admissionSemester = await AdmissionSemester.findById(
     payload.admissionSemester,
   );
+  if (!admissionSemester) {
+    throw new AppError(404, 'Admission Semester Not Found!');
+  }
+
+  // Find Department
+  const academicDepartment = await AcademicDepartment.findById(
+    payload.academicDepartment,
+  );
+  if (!academicDepartment) {
+    throw new AppError(404, 'Academic Department Not Found!');
+  }
+
+  // Set Academic Faculty Data
+  payload.academicFaculty = academicDepartment.academicFaculty;
+
   // Init Session
   const session = await mongoose.startSession();
   try {
@@ -67,7 +82,7 @@ const userSaveToDB = async (password: string, payload: TStudent, file: any) => {
     // End Session
     await session.endSession();
     return result;
-  } catch (err) {
+  } catch (err: any) {
     await session.abortTransaction();
     await session.endSession();
     throw new Error(err);
@@ -134,7 +149,7 @@ const facultySaveToDB = async (payload: TFaculty, file: any) => {
     await session.commitTransaction();
     await session.endSession();
     return newFaculty;
-  } catch (err) {
+  } catch (err: any) {
     await session.abortTransaction();
     await session.endSession();
     throw new Error(err);
@@ -194,7 +209,7 @@ const adminSaveToDB = async (payload: TFaculty, file: any) => {
     await session.commitTransaction();
     await session.endSession();
     return newAdmin;
-  } catch (err) {
+  } catch (err: any) {
     await session.abortTransaction();
     await session.endSession();
     throw new Error(err);
