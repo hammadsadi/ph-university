@@ -2,6 +2,8 @@ import { Router } from 'express';
 import validateRequest from '../../middlewares/validateRequest';
 import { academicFacultyValidationSchemas } from './academic.faculty.validation';
 import { AcademicFeacultyControllers } from './academic.feaculty.controllers';
+import authChecking from '../../middlewares/authChecking';
+import { USER_ROLE } from '../users/user.constant';
 
 // Route init
 const route = Router();
@@ -9,6 +11,7 @@ const route = Router();
 // Create Feaculty
 route.post(
   '/create-academic-feaculty',
+  authChecking(USER_ROLE.superAdmin, USER_ROLE.admin),
   validateRequest(
     academicFacultyValidationSchemas.createAcademicFacultyValidation,
   ),
