@@ -27,7 +27,7 @@ router.post(
 // Create Faculty Route
 router.post(
   '/create-faculty',
-  authChecking(USER_ROLE.admin),
+  authChecking(USER_ROLE.admin, USER_ROLE.superAdmin),
   uploadMulter.single('file'),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);
@@ -39,7 +39,7 @@ router.post(
 // Create Admin Route
 router.post(
   '/create-admin',
-  // authChecking(USER_ROLE.admin),
+  authChecking(USER_ROLE.admin, USER_ROLE.superAdmin),
   uploadMulter.single('file'),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);
@@ -52,7 +52,7 @@ router.post(
 // Update User Status
 router.patch(
   '/change-status/:id',
-  authChecking(USER_ROLE.admin),
+  authChecking(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(UserValidationSchemas.userStatusChangeValidationSchema),
   userControllers.updateStatus,
 );
@@ -60,7 +60,12 @@ router.patch(
 // Create Faculty Route
 router.get(
   '/me',
-  authChecking(USER_ROLE.admin, USER_ROLE.student, USER_ROLE.faculty),
+  authChecking(
+    USER_ROLE.admin,
+    USER_ROLE.student,
+    USER_ROLE.faculty,
+    USER_ROLE.superAdmin,
+  ),
   userControllers.getMe,
 );
 
