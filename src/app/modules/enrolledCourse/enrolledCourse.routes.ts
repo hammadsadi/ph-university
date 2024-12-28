@@ -3,6 +3,7 @@ import validateRequest from '../../middlewares/validateRequest';
 import { EnrolledCourseValidationSchemas } from './enrolledCourse.validation';
 import { EnrolledCourseControllers } from './enrolledCourse.controllers';
 import authChecking from '../../middlewares/authChecking';
+import { USER_ROLE } from '../users/user.constant';
 
 // Route init
 const route = Router();
@@ -10,7 +11,7 @@ const route = Router();
 // Create Enroll Course
 route.post(
   '/create-enrolled-course',
-  authChecking('student'),
+  authChecking(USER_ROLE.student),
   validateRequest(
     EnrolledCourseValidationSchemas.createEnrolledCourseValidation,
   ),
@@ -20,7 +21,7 @@ route.post(
 // Update Enroll Course Marks
 route.patch(
   '/update-enrolled-course-marks',
-  authChecking('faculty'),
+  authChecking(USER_ROLE.admin, USER_ROLE.faculty, USER_ROLE.superAdmin),
   validateRequest(EnrolledCourseValidationSchemas.updateCourseMarksValidation),
   EnrolledCourseControllers.updateEnrolledCourseMarks,
 );
@@ -28,7 +29,12 @@ route.patch(
 // Update Enroll Course Marks
 route.get(
   '/all-enrolled-courses',
-  authChecking('admin'),
+  authChecking(
+    USER_ROLE.admin,
+    USER_ROLE.faculty,
+    USER_ROLE.superAdmin,
+    USER_ROLE.student,
+  ),
   EnrolledCourseControllers.getAllEnrolledCourse,
 );
 
