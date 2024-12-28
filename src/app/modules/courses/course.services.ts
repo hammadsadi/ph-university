@@ -88,6 +88,18 @@ const getSingleCourseFromDB = async (id: string) => {
 };
 
 /**
+ *@Description Get Faculties With Course
+ @Method GET
+ */
+const getFacultiesWithCourseFromDB = async (courseId: string) => {
+  const result = await CourseFaculty.findOne({ course: courseId }).populate(
+    'faculties',
+  );
+  return result;
+};
+
+
+/**
  *@Description Update Course
  @Method Patch
  */
@@ -187,4 +199,5 @@ export const CourseServices = {
   updateSingleCourseFromDB,
   assignFacultiesWithCoursesIntoDB,
   removeFacultiesFromCoursesIntoDB,
+  getFacultiesWithCourseFromDB,
 };
