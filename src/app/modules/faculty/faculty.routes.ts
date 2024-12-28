@@ -10,15 +10,24 @@ const route = Router();
 // Get All Student
 route.get(
   '/',
-  authChecking(USER_ROLE.admin, USER_ROLE.faculty),
+  authChecking(USER_ROLE.admin, USER_ROLE.faculty, USER_ROLE.superAdmin),
   FacultyControllers.getAllFaculty,
 );
-route.get('/:id', FacultyControllers.getSingleFaculty);
+route.get(
+  '/:id',
+  authChecking(USER_ROLE.admin, USER_ROLE.faculty, USER_ROLE.superAdmin),
+  FacultyControllers.getSingleFaculty,
+);
 route.patch(
   '/:id',
+  authChecking(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(FacultyValidationSchemas.updateFacultyValidationSchema),
   FacultyControllers.updateSingleFaculty,
 );
-route.delete('/:id', FacultyControllers.deleteSingleFaculty);
+route.delete(
+  '/:id',
+  authChecking(USER_ROLE.admin, USER_ROLE.superAdmin),
+  FacultyControllers.deleteSingleFaculty,
+);
 
 export const FacultyRoutes = route;

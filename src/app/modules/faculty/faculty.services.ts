@@ -1,3 +1,6 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from 'mongoose';
 import { TFaculty } from './faculty.interface';
 import { Faculty } from './faculty.model';
@@ -133,7 +136,7 @@ const deleteSingleFacultyFromDB = async (id: string) => {
     // End Session
     await session.endSession();
     return deletedFaculty;
-  } catch (error) {
+  } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
     throw new AppError(400, 'Failed to Delete Faculty Data');

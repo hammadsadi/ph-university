@@ -117,6 +117,8 @@ const facultySaveToDB = async (payload: TFaculty, file: any) => {
     throw new AppError(404, 'Academic Department Not Found!');
   }
 
+  payload.academicFaculty = academicDepartment.academicFaculty;
+
   // Start Session
   const session = await mongoose.startSession();
   try {
