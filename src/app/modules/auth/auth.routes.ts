@@ -18,7 +18,12 @@ route.post(
 // Change Password
 route.post(
   '/change-password',
-  authChecking(USER_ROLE.admin, USER_ROLE.faculty, USER_ROLE.student),
+  authChecking(
+    USER_ROLE.admin,
+    USER_ROLE.superAdmin,
+    USER_ROLE.faculty,
+    USER_ROLE.student,
+  ),
   validateRequest(AuthValidationSchemas.passwordChangeValidationSchema),
   AuthControllers.changeUserPassword,
 );
