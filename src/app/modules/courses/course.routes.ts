@@ -10,22 +10,33 @@ const route = Router();
 
 route.post(
   '/',
-  authChecking(USER_ROLE.admin),
+  authChecking(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(CourseValidationSchemas.createCourseValidationSchema),
   CourseControllers.createCourse,
 );
 route.get(
   '/',
-  authChecking(USER_ROLE.admin, USER_ROLE.faculty, USER_ROLE.student),
+  authChecking(
+    USER_ROLE.admin,
+    USER_ROLE.faculty,
+    USER_ROLE.student,
+    USER_ROLE.superAdmin,
+  ),
   CourseControllers.getAllCourses,
 );
 route.get(
   '/:id',
-  authChecking(USER_ROLE.admin, USER_ROLE.faculty, USER_ROLE.student),
+  authChecking(
+    USER_ROLE.admin,
+    USER_ROLE.faculty,
+    USER_ROLE.student,
+    USER_ROLE.superAdmin,
+  ),
   CourseControllers.getSingleCourse,
 );
 route.put(
   '/:courseId/assign-faculties',
+  authChecking(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(
     CourseValidationSchemas.assignCourseWithFacultiesValidationSchema,
   ),
@@ -33,6 +44,7 @@ route.put(
 );
 route.delete(
   '/:courseId/remove-faculties',
+  authChecking(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(
     CourseValidationSchemas.assignCourseWithFacultiesValidationSchema,
   ),
@@ -40,13 +52,13 @@ route.delete(
 );
 route.patch(
   '/:id',
-  authChecking(USER_ROLE.admin),
+  authChecking(USER_ROLE.admin, USER_ROLE.superAdmin),
   validateRequest(CourseValidationSchemas.updateCourseValidationSchema),
   CourseControllers.updateSingleCourse,
 );
 route.delete(
   '/:id',
-  authChecking(USER_ROLE.admin),
+  authChecking(USER_ROLE.admin, USER_ROLE.superAdmin),
   CourseControllers.deleteSingleCourse,
 );
 
