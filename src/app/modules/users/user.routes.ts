@@ -15,7 +15,7 @@ const router = Router();
 // Create Student Route
 router.post(
   '/create-student',
-  authChecking(USER_ROLE.admin),
+  authChecking(USER_ROLE.admin, USER_ROLE.superAdmin),
   uploadMulter.single('file'),
   (req: Request, res: Response, next: NextFunction) => {
     req.body = JSON.parse(req.body.data);

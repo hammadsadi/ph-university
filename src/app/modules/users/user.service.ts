@@ -63,12 +63,15 @@ const userSaveToDB = async (password: string, payload: TStudent, file: any) => {
     payload.id = createdUser[0].id;
     payload.user = createdUser[0]._id;
 
-    const filePath = file?.path;
-    const imgName = `${userData?.id}-${payload?.name.firstName}`;
-    // Cloudinary Image Upload
-    const profileImage = await uploadImageToCloudinary(imgName, filePath);
-    // Set Image Url
-    payload.profileImage = profileImage?.secure_url as string;
+    // Check Image
+    if (file) {
+      const filePath = file?.path;
+      const imgName = `${userData?.id}-${payload?.name.firstName}`;
+      // Cloudinary Image Upload
+      const profileImage = await uploadImageToCloudinary(imgName, filePath);
+      // Set Image Url
+      payload.profileImage = profileImage?.secure_url as string;
+    }
 
     // Create Student
     const result = await Student.create([payload], { session }); //  Return Array
@@ -121,12 +124,16 @@ const facultySaveToDB = async (payload: TFaculty, file: any) => {
     session.startTransaction();
     // Generate Faculty Id
     userData.id = await generateFacultyId();
-    const filePath = file?.path;
-    const imgName = `${userData?.id}-${payload?.name.firstName}`;
-    // Cloudinary Image Upload
-    const profileImage = await uploadImageToCloudinary(imgName, filePath);
-    // Set Image Url
-    payload.profileImage = profileImage?.secure_url as string;
+
+    // Check File
+    if (file) {
+      const filePath = file?.path;
+      const imgName = `${userData?.id}-${payload?.name.firstName}`;
+      // Cloudinary Image Upload
+      const profileImage = await uploadImageToCloudinary(imgName, filePath);
+      // Set Image Url
+      payload.profileImage = profileImage?.secure_url as string;
+    }
 
     // Create User
     const newsUser = await User.create([userData], { session }); // Return Array
@@ -181,12 +188,15 @@ const adminSaveToDB = async (payload: TFaculty, file: any) => {
     // Generate Faculty Id
     userData.id = await generateAdminId();
 
-    const filePath = file?.path;
-    const imgName = `${userData?.id}-${payload?.name.firstName}`;
-    // Cloudinary Image Upload
-    const profileImage = await uploadImageToCloudinary(imgName, filePath);
-    // Set Image Url
-    payload.profileImage = profileImage?.secure_url as string;
+    // Check File
+    if (file) {
+      const filePath = file?.path;
+      const imgName = `${userData?.id}-${payload?.name.firstName}`;
+      // Cloudinary Image Upload
+      const profileImage = await uploadImageToCloudinary(imgName, filePath);
+      // Set Image Url
+      payload.profileImage = profileImage?.secure_url as string;
+    }
 
     // Create User
     const newsUser = await User.create([userData], { session }); // Return Array

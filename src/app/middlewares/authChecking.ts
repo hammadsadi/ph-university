@@ -23,7 +23,7 @@ const authChecking = (...requiredRoles: TUserRole[]) => {
     // Check User
     const user = await User.isUserExistCustomId(userId);
     if (!user) {
-      throw new AppError(400, 'User Not Found!');
+      throw new AppError(400, 'You are not Authorized!');
     }
 
     // Check User Is Deleted Or Not
