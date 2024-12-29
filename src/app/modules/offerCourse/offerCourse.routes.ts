@@ -21,13 +21,14 @@ route.post(
 // Get All Offered Course
 route.get(
   '/',
-  authChecking(
-    USER_ROLE.admin,
-    USER_ROLE.superAdmin,
-    USER_ROLE.faculty,
-    USER_ROLE.student,
-  ),
+  authChecking(USER_ROLE.admin, USER_ROLE.superAdmin, USER_ROLE.faculty),
   OfferCourseCOntrollers.getOfferCourse,
+);
+// Get My Offered Courses
+route.get(
+  '/my-offered-courses',
+  authChecking(USER_ROLE.student),
+  OfferCourseCOntrollers.myOfferCourse,
 );
 
 // Get Single Offered Course

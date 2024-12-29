@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable no-unused-vars */
 import mongoose from 'mongoose';
 import AppError from '../../errors/AppError';
 import { AcademicDepartment } from '../academicDepartment/academicDepartment.model';
@@ -8,6 +11,7 @@ import { SemesterRegistration } from '../semesterRegistration/semester.registrat
 import { TOfferCourse } from './offerCourse.interface';
 import { OfferCourse } from './offerCourse.model';
 import { hasTimeConflict } from './offeredCourse.utils';
+import { Student } from '../students/student.mode';
 
 /**
  *@Description Create Offer Course
@@ -251,16 +255,35 @@ const deleteSingleOfferCourseFromDB = async (id: string) => {
     // End Session
     await session.endSession();
     return deletedOfferedCourses;
-  } catch (error) {
+  } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
     throw new AppError(400, 'Offered Course Deleted Failed!');
   }
 };
+
+/**
+ *@Description My Offer Course
+ @Method GET
+ */
+const myOfferCourseFromDB = async (userId: string) => {
+  // Find Student
+  const isExistStudent = await Student.findOne({ id: userId });
+  if (!isExistStudent) {
+    throw new AppError(404, 'Student Not Found!');
+  }
+  // Find Current ONGOING Semester
+  const currentOnGoingSemester = await SemesterRegistration.findOne({
+    status: 'ONGOING',
+  });
+  return currentOnGoingSemester;
+};
+
 export const OfferCourseServices = {
   offerCourseSaveToDB,
   updatedOfferCourseFromDB,
   getAllOfferCourseFromDB,
   getSingleOfferCourseFromDB,
   deleteSingleOfferCourseFromDB,
+  myOfferCourseFromDB,
 };
