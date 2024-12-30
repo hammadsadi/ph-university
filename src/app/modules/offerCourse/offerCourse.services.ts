@@ -273,10 +273,36 @@ const myOfferCourseFromDB = async (userId: string) => {
     throw new AppError(404, 'Student Not Found!');
   }
   // Find Current ONGOING Semester
-  const currentOnGoingSemester = await SemesterRegistration.findOne({
-    status: 'ONGOING',
-  });
-  return currentOnGoingSemester;
+  const currentOnGoingRegistrationSemester = await SemesterRegistration.findOne(
+    {
+      status: 'ONGOING',
+    },
+  );
+  if (!currentOnGoingRegistrationSemester) {
+    throw new AppError(404, 'There is no Ongoing Semester Registration!');
+  }
+
+  // Find Match Offer Course
+  const result = await OfferCourse.aggregate([
+    {
+      $match: {
+        semesterRegistration: currentOnGoingRegistrationSemester._id,
+        academicFecaulty: isExistStudent.academicFaculty,
+        academicDepartment: isExistStudent.academicDepartment,
+      },
+    },
+    // Lookup Stage
+    {
+      $lookup: {
+        from: 'courses',
+        localField: 'course',
+        foreignField: '_id',
+        as: 'course',
+      },
+    },
+  ]);
+
+  return result;
 };
 
 export const OfferCourseServices = {
