@@ -300,6 +300,67 @@ const myOfferCourseFromDB = async (userId: string) => {
         as: 'course',
       },
     },
+    // Unwind For Course Array
+    {
+      $unwind: '$course',
+    },
+    // Lookup For Get Enrolled Courses
+    {
+      $lookup: {
+        from: 'enrolledcourses',
+        let: {
+          currentOnGoingRegistrationSemester:
+            currentOnGoingRegistrationSemester._id,
+          currentStudent: isExistStudent._id,
+        },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  {
+                    $eq: [
+                      '$semesterRegistration',
+                      '$$currentOnGoingRegistrationSemester',
+                    ],
+                  },
+                  {
+                    $eq: ['$student', '$$currentStudent'],
+                  },
+                  {
+                    $eq: ['$isEnrolled', true],
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        as: 'enrolledCourses',
+      },
+    },
+    // Stage For Add Fields
+    {
+      $addFields: {
+        isAlreadyEnrolled: {
+          $in: [
+            '$course._id',
+            {
+              $map: {
+                input: '$enrolledCourses',
+                as: 'enroll',
+                in: '$$enroll.course',
+              },
+            },
+          ],
+        },
+      },
+    },
+    // Match Stage
+    {
+      $match: {
+        isAlreadyEnrolled: false,
+      },
+    },
   ]);
 
   return result;
