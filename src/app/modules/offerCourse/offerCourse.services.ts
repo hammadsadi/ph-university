@@ -338,6 +338,32 @@ const myOfferCourseFromDB = async (userId: string) => {
         as: 'enrolledCourses',
       },
     },
+    // Lookup Stage For Completed Course
+    {
+      $lookup: {
+        from: 'enrolledcourses',
+        let: {
+          currentStudent: isExistStudent._id,
+        },
+        pipeline: [
+          {
+            $match: {
+              $expr: {
+                $and: [
+                  {
+                    $eq: ['$student', '$$currentStudent'],
+                  },
+                  {
+                    $eq: ['$isCompleted', true],
+                  },
+                ],
+              },
+            },
+          },
+        ],
+        as: 'completedCourse',
+      },
+    },
     // Stage For Add Fields
     {
       $addFields: {
