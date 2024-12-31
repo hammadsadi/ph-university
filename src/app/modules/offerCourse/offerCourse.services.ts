@@ -364,9 +364,32 @@ const myOfferCourseFromDB = async (userId: string) => {
         as: 'completedCourse',
       },
     },
+    // Stage For Completed Course Id
+    {
+      $addFields: {
+        completedCourseIds: {
+          $map: {
+            input: '$completedCourse',
+            as: 'completed',
+            in: '$$completed.course',
+          },
+        },
+      },
+    },
     // Stage For Add Fields
     {
       $addFields: {
+        isPreRequisitesFulFilled: {
+          $or: [
+            { $eq: ['$course.preRequisiteCourses', []] },
+            {
+              $setIsSubset: [
+                '$course.preRequisiteCourses.course',
+                '$completedCourseIds',
+              ],
+            },
+          ],
+        },
         isAlreadyEnrolled: {
           $in: [
             '$course._id',
@@ -385,6 +408,7 @@ const myOfferCourseFromDB = async (userId: string) => {
     {
       $match: {
         isAlreadyEnrolled: false,
+        isPreRequisitesFulFilled: true,
       },
     },
   ]);
