@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import mongoose from 'mongoose';
 import AppError from '../../errors/AppError';
 import { User } from '../users/user.model';
@@ -109,10 +110,10 @@ const deleteSingleAdminFromDB = async (id: string) => {
     // End Session
     await session.endSession();
     return deletedAdmin;
-  } catch (error) {
+  } catch (error: any) {
     await session.abortTransaction();
     await session.endSession();
-    throw new AppError(400, 'Failed to Delete Admin Data');
+    throw new AppError(400, error);
   }
 };
 
