@@ -1,0 +1,1 @@
+# [Server Live Link:](https://islamic-university-api.vercel.app/)

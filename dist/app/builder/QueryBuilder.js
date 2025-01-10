@@ -1,0 +1,71 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+class QueryBuilder {
+    constructor(modelQuery, query) {
+        this.modelQuery = modelQuery;
+        this.query = query;
+    }
+    // Searching
+    // search(searchAbleFields: string[]) {
+    //   const searchTerm = this?.query?.searchTerm;
+    //   if (searchTerm) {
+    //     this.modelQuery = this.modelQuery.find({
+    //       $or: searchAbleFields.map(
+    //         (field) =>
+    //           ({
+    //             [field]: { $regex: searchTerm, $options: 'i' },
+    //           }) as FilterQuery<T>,
+    //       ),
+    //     });
+    //   }
+    //   return this;
+    // }
+    search(searchableFields) {
+        var _a;
+        const searchTerm = (_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.searchTerm;
+        if (searchTerm) {
+            this.modelQuery = this.modelQuery.find({
+                $or: searchableFields.map((field) => ({
+                    [field]: { $regex: searchTerm, $options: 'i' },
+                })),
+            });
+        }
+        return this;
+    }
+    // Filtering
+    filter() {
+        const queryObj = Object.assign({}, this.query);
+        const excludeField = ['searchTerm', 'sort', 'limit', 'page', 'fields'];
+        excludeField.forEach((el) => delete queryObj[el]);
+        this.modelQuery = this.modelQuery.find(queryObj);
+        return this;
+    }
+    // Sortng
+    sort() {
+        var _a, _b, _c;
+        const sort = ((_c = (_b = (_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.sort) === null || _b === void 0 ? void 0 : _b.split(',')) === null || _c === void 0 ? void 0 : _c.join(' ')) || '-createdAt';
+        this.modelQuery = this.modelQuery.sort(sort);
+        return this;
+    }
+    // Pagination
+    pagination() {
+        var _a, _b;
+        const page = Number((_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.page) || 1;
+        const limit = Number((_b = this === null || this === void 0 ? void 0 : this.query) === null || _b === void 0 ? void 0 : _b.limit) || 10;
+        const skip = (page - 1) * limit;
+        this.modelQuery = this.modelQuery.skip(skip).limit(limit);
+        return this;
+    }
+    // Fields
+    fields() {
+        var _a, _b, _c;
+        const fields = ((_c = (_b = (_a = this === null || this === void 0 ? void 0 : this.query) === null || _a === void 0 ? void 0 : _a.fields) === null || _b === void 0 ? void 0 : _b.split(',')) === null || _c === void 0 ? void 0 : _c.join(' ')) || '-__v';
+        this.modelQuery = this.modelQuery.select(fields);
+        return this;
+    }
+    // Meta Data Count
+    countTotal() {
+        const filterQuery = this.modelQuery.getFilter();
+    }
+}
+exports.default = QueryBuilder;
