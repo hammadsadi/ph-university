@@ -1,3 +1,5 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { NextFunction, Request, Response } from 'express';
 import catchAsync from '../utils/catchAsync';
 import AppError from '../errors/AppError';
@@ -13,22 +15,28 @@ const authChecking = (...requiredRoles: TUserRole[]) => {
     if (!token) {
       throw new AppError(401, 'You are not Authorized!');
     }
-    // invalid token
-    const decoded = jwt.verify(
-      token,
-      config.jwt_access_token as string,
-    ) as JwtPayload;
+    let decoded;
+    try {
+      // invalid token
+      decoded = jwt.verify(
+        token,
+        config.jwt_access_token as string,
+      ) as JwtPayload;
+    } catch (error) {
+      throw new AppError(401, 'You are Not Authorized!');
+    }
+
     // Check Role
     const { role, userId, iat } = decoded;
     // Check User
     const user = await User.isUserExistCustomId(userId);
     if (!user) {
-      throw new AppError(400, 'You are not Authorized!');
+      throw new AppError(401, 'You are not Authorized!');
     }
 
     // Check User Is Deleted Or Not
     if (user?.isDeleted) {
-      throw new AppError(400, 'User Not Found Bacuase User is Deleted!');
+      throw new AppError(401, 'User Not Found Bacuase User is Deleted!');
     }
     // Check User Status Block Or Not
     if (user?.status === 'block') {
